@@ -1,0 +1,25 @@
+{
+  "name": "Sweet FM Online",
+  "short_name": "Sweet FM",
+  "description": "Ghana's Premier News Portal - Breaking news, politics, business, sports, and entertainment.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#E60000",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/sweet-fm-logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/sweet-fm-logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "categories": ["news", "entertainment", "music"],
+  "lang": "en-GH"
+}
