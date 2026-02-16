@@ -2,13 +2,17 @@ import { createClient, type Entry, type Asset, type EntrySkeletonType } from "co
 import type { Article, Author, Category, BreakingNews } from "@/types";
 
 // ─── Contentful Client ──────────────────────────────────────────────
-const client = createClient({
-  space: process.env.CONTENTFUL_SPACE_ID || "",
-  accessToken: process.env.CONTENTFUL_ACCESS_TOKEN || "",
-});
+const contentfulSpaceId = process.env.CONTENTFUL_SPACE_ID;
+const contentfulAccessToken = process.env.CONTENTFUL_ACCESS_TOKEN;
 
-const isConfigured =
-  !!process.env.CONTENTFUL_SPACE_ID && !!process.env.CONTENTFUL_ACCESS_TOKEN;
+const isConfigured = !!contentfulSpaceId && !!contentfulAccessToken;
+
+const client = isConfigured
+  ? createClient({
+      space: contentfulSpaceId,
+      accessToken: contentfulAccessToken,
+    })
+  : null;
 
 // ─── Transform helpers ──────────────────────────────────────────────
 
@@ -138,7 +142,7 @@ const mockBreakingNews: BreakingNews[] = [
 // ─── API Functions — Contentful-first with mock fallback ────────────
 
 export async function getArticles(limit: number = 10): Promise<Article[]> {
-  if (isConfigured) {
+  if (client) {
     try {
       const entries = await client.getEntries({
         content_type: "article",
@@ -157,7 +161,7 @@ export async function getArticles(limit: number = 10): Promise<Article[]> {
 }
 
 export async function getFeaturedArticles(): Promise<Article[]> {
-  if (isConfigured) {
+  if (client) {
     try {
       const entries = await client.getEntries({
         content_type: "article",
@@ -176,7 +180,7 @@ export async function getFeaturedArticles(): Promise<Article[]> {
 }
 
 export async function getArticleBySlug(slug: string): Promise<Article | null> {
-  if (isConfigured) {
+  if (client) {
     try {
       const entries = await client.getEntries({
         content_type: "article",
@@ -195,7 +199,7 @@ export async function getArticleBySlug(slug: string): Promise<Article | null> {
 }
 
 export async function getArticlesByCategory(categorySlug: string): Promise<Article[]> {
-  if (isConfigured) {
+  if (client) {
     try {
       // First get the category entry by slug
       const catEntries = await client.getEntries({
@@ -223,7 +227,7 @@ export async function getArticlesByCategory(categorySlug: string): Promise<Artic
 }
 
 export async function getCategories(): Promise<Category[]> {
-  if (isConfigured) {
+  if (client) {
     try {
       const entries = await client.getEntries({
         content_type: "category",
@@ -241,7 +245,7 @@ export async function getCategories(): Promise<Category[]> {
 }
 
 export async function getBreakingNews(): Promise<BreakingNews[]> {
-  if (isConfigured) {
+  if (client) {
     try {
       const entries = await client.getEntries({
         content_type: "breakingNews",
@@ -259,7 +263,7 @@ export async function getBreakingNews(): Promise<BreakingNews[]> {
 }
 
 export async function getTrendingArticles(limit: number = 5): Promise<Article[]> {
-  if (isConfigured) {
+  if (client) {
     try {
       const entries = await client.getEntries({
         content_type: "article",
