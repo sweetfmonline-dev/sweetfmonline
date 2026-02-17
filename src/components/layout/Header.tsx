@@ -1,7 +1,7 @@
 import { TopBar } from "./TopBar";
 import { MainNav } from "./MainNav";
 import { BreakingNewsTicker } from "./BreakingNewsTicker";
-import { getBreakingNews } from "@/lib/contentful";
+import { getBreakingNews } from "@/lib/data";
 
 export async function Header() {
   const breakingNews = await getBreakingNews();

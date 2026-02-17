@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { ArticleCard } from "@/components/news";
 import { TrendingSidebar } from "@/components/news";
-import { getArticlesByCategory, getCategories, getTrendingArticles } from "@/lib/contentful";
+import { getArticlesByCategory, getCategories, getTrendingArticles } from "@/lib/data";
 import type { Metadata } from "next";
 
 interface CategoryPageProps {

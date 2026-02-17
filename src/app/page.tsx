@@ -1,5 +1,5 @@
 import { HeroSection, TrendingSidebar, ArticleCard } from "@/components/news";
-import { getFeaturedArticles, getArticles, getTrendingArticles } from "@/lib/contentful";
+import { getFeaturedArticles, getArticles, getTrendingArticles } from "@/lib/data";
 
 export default async function Home() {
   const featuredArticles = await getFeaturedArticles();

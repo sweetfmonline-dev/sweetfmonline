@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Clock, Calendar, ArrowLeft, Share2, Facebook, Twitter, MessageCircle } from "lucide-react";
-import { getArticleBySlug, getTrendingArticles, getArticlesByCategory } from "@/lib/contentful";
+import { getArticleBySlug, getTrendingArticles, getArticlesByCategory } from "@/lib/data";
 import { TrendingSidebar, ArticleCard } from "@/components/news";
 import { ArticleJsonLd } from "@/components/seo/ArticleJsonLd";
 import { formatDate, formatRelativeTime } from "@/lib/utils";

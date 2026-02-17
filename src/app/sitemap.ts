@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getArticles, getCategories } from "@/lib/contentful";
+import { getArticles, getCategories } from "@/lib/data";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://sweetfmonline.com";

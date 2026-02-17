@@ -1,36 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sweet FM Online
 
-## Getting Started
+Sweet FM Online is a Next.js news website with a data layer that supports:
 
-First, run the development server:
+1. Contentful (primary source when configured)
+2. Supabase (fallback)
+3. Local mock data (final fallback)
+
+## 1) Environment setup
+
+Copy `.env.example` to `.env.local` and fill in values.
+
+Required for Supabase fallback:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+NEXT_PUBLIC_SUPABASE_URL=https://your-project-ref.supabase.co
+SUPABASE_ANON_KEY=your-supabase-anon-key
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Contentful (recommended if you want to manage news from CMS):
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+CONTENTFUL_SPACE_ID=your-space-id
+CONTENTFUL_ACCESS_TOKEN=your-access-token
+CONTENTFUL_MANAGEMENT_TOKEN=your-management-token
+CONTENTFUL_ENVIRONMENT_ID=master
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+To initialize Contentful content models and seed starter content:
 
-## Learn More
+```bash
+node scripts/setup-contentful.mjs
+```
 
-To learn more about Next.js, take a look at the following resources:
+## 2) Create database schema in Supabase
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Run the SQL in:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+`supabase/schema.sql`
 
-## Deploy on Vercel
+You can paste this file in Supabase SQL Editor and execute it.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This creates:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `categories`
+- `authors`
+- `articles`
+- `breaking_news`
+
+plus indexes, `updated_at` triggers, and read policies for anon users.
+
+## 3) Seed initial data
+
+Insert records into the tables in this order:
+
+1. `categories`
+2. `authors`
+3. `articles`
+4. `breaking_news`
+
+You can use Supabase Table Editor or SQL inserts.
+
+## 4) Run locally
+
+```bash
+npm install
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000).
+
+## 5) Deploy (Vercel)
+
+Set the same environment variables in Vercel Project Settings > Environment Variables.
+
+At minimum for production DB-backed content:
+
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `SUPABASE_ANON_KEY`

@@ -4,6 +4,26 @@
  * Run with: node scripts/setup-contentful.mjs
  */
 
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+
+// Load .env.local (Next.js doesn't do this for plain node scripts)
+try {
+  const envPath = resolve(process.cwd(), ".env.local");
+  const envContent = readFileSync(envPath, "utf-8");
+  for (const line of envContent.split("\n")) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) continue;
+    const eqIndex = trimmed.indexOf("=");
+    if (eqIndex === -1) continue;
+    const key = trimmed.slice(0, eqIndex).trim();
+    const value = trimmed.slice(eqIndex + 1).trim();
+    if (!process.env[key]) process.env[key] = value;
+  }
+} catch {
+  // .env.local not found — rely on shell env
+}
+
 import pkg from "contentful-management";
 const { createClient } = pkg;
 
@@ -39,30 +59,19 @@ async function run() {
 
   // ─── 1. Create Content Types ───────────────────────────────────────
 
+  const existingIds = new Set(existing.items.map((ct) => ct.sys.id));
+
   async function upsertContentType(id, data) {
+    if (existingIds.has(id)) {
+      console.log(`  ⏭️  ${data.name} already exists — skipping`);
+      return;
+    }
     try {
       const ct = await client.contentType.createWithId({ contentTypeId: id }, data);
       await client.contentType.publish({ contentTypeId: id }, ct);
       console.log(`  ✅ ${data.name} created & published`);
     } catch (e) {
-      const msg = e?.message || JSON.stringify(e);
-      if (msg.includes("exist") || msg.includes("VersionMismatch")) {
-        console.log(`  ⏭️  ${data.name} already exists`);
-        // Update and republish
-        try {
-          const current = await client.contentType.get({ contentTypeId: id });
-          const updated = await client.contentType.update(
-            { contentTypeId: id },
-            { ...data, sys: current.sys }
-          );
-          await client.contentType.publish({ contentTypeId: id }, updated);
-          console.log(`  🔄 ${data.name} updated & republished`);
-        } catch {
-          console.log(`  ℹ️  ${data.name} unchanged`);
-        }
-      } else {
-        throw e;
-      }
+      console.log(`  ⏭️  ${data.name} — skipped (${e?.message || e?.status || "already exists"})`);
     }
   }
 
@@ -142,11 +151,12 @@ async function run() {
       await client.entry.publish({ entryId }, entry);
       return entry;
     } catch (e) {
-      const msg = e?.message || JSON.stringify(e);
-      if (msg.includes("exist") || msg.includes("Conflict") || msg.includes("VersionMismatch")) {
+      // Entry likely already exists — try to fetch it
+      try {
         return await client.entry.get({ entryId });
+      } catch {
+        throw e; // re-throw original if fetch also fails
       }
-      throw e;
     }
   }
 
@@ -174,11 +184,12 @@ async function run() {
       await client.asset.publish({ assetId }, latest);
       return latest;
     } catch (e) {
-      const msg = e?.message || JSON.stringify(e);
-      if (msg.includes("exist") || msg.includes("Conflict") || msg.includes("VersionMismatch")) {
+      // Asset likely already exists — try to fetch it
+      try {
         return await client.asset.get({ assetId });
+      } catch {
+        throw e; // re-throw original if fetch also fails
       }
-      throw e;
     }
   }
 
