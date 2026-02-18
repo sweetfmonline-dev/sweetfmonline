@@ -28,7 +28,7 @@ function transformCategory(entry: Entry<EntrySkeletonType>): Category {
   return {
     id: entry.sys.id,
     name: (f.name as string) || "",
-    slug: (f.slug as string) || "",
+    slug: ((f.slug as string) || "").trim(),
     description: (f.description as string) || undefined,
     color: (f.color as string) || undefined,
   };
@@ -55,7 +55,7 @@ function transformArticle(entry: Entry<EntrySkeletonType>): Article {
   return {
     id: entry.sys.id,
     title: (f.title as string) || "",
-    slug: (f.slug as string) || "",
+    slug: ((f.slug as string) || "").trim(),
     excerpt: (f.excerpt as string) || "",
     content: (f.content as string) || undefined,
     featuredImage: imageAsset ? assetUrl(imageAsset) : "",
@@ -178,12 +178,22 @@ export async function getFeaturedArticles(): Promise<Article[]> {
 export async function getArticleBySlug(slug: string): Promise<Article | null> {
   if (client) {
     try {
-      const entries = await client.getEntries({
+      // Try exact match first
+      let entries = await client.getEntries({
         content_type: "article",
         "fields.slug": slug,
         limit: 1,
         include: 2,
       });
+      // Fallback: slug may have whitespace in Contentful — match via [match]
+      if (entries.items.length === 0) {
+        entries = await client.getEntries({
+          content_type: "article",
+          "fields.slug[match]": slug,
+          limit: 1,
+          include: 2,
+        });
+      }
       return entries.items.length > 0 ? transformArticle(entries.items[0]) : null;
     } catch (e) {
       console.warn("Contentful fetch failed, using mock data:", e);
