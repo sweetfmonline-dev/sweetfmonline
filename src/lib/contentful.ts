@@ -57,7 +57,7 @@ function transformArticle(entry: Entry<EntrySkeletonType>): Article {
     title: (f.title as string) || "",
     slug: ((f.slug as string) || "").trim(),
     excerpt: (f.excerpt as string) || "",
-    content: (f.content as string) || undefined,
+    content: f.content || undefined,
     featuredImage: imageAsset ? assetUrl(imageAsset) : "",
     category: categoryEntry
       ? transformCategory(categoryEntry)

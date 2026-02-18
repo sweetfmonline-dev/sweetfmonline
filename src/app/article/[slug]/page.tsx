@@ -5,6 +5,7 @@ import { Clock, Calendar, ArrowLeft } from "lucide-react";
 import { getArticleBySlug, getTrendingArticles, getArticlesByCategory, getAdvertisements } from "@/lib/data";
 import { TrendingSidebar, ArticleCard } from "@/components/news";
 import { ShareBar } from "@/components/news/ShareBar";
+import { RichTextRenderer } from "@/components/news/RichTextRenderer";
 import { AdBanner } from "@/components/ads";
 import { ArticleJsonLd } from "@/components/seo/ArticleJsonLd";
 import { formatDate, formatRelativeTime } from "@/lib/utils";
@@ -163,35 +164,17 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 </div>
 
                 {/* Article Body */}
-                <div className="px-6 py-8 font-serif text-lg leading-relaxed text-charcoal space-y-6">
-                  <p>
-                    {article.excerpt} This is placeholder body content that will be replaced
-                    with real article content from Contentful CMS once integrated.
-                  </p>
-                  <p>
-                    Ghana continues to make significant strides in various sectors, with
-                    developments that impact millions of citizens across all 16 regions.
-                    Stakeholders have expressed optimism about the direction of the country,
-                    while analysts urge caution and continued reform efforts.
-                  </p>
+                <div className="px-6 py-8 font-serif text-lg leading-relaxed text-charcoal">
+                  {article.content ? (
+                    <RichTextRenderer content={article.content} />
+                  ) : (
+                    <p>{article.excerpt}</p>
+                  )}
 
                   {/* In-Article Ad */}
                   <div className="my-6">
                     <AdBanner ad={inArticleAds[0] || null} position="in-article" />
                   </div>
-
-                  <p>
-                    The government has reiterated its commitment to transparency and
-                    accountability, promising regular updates to the public on the progress
-                    of key initiatives. Civil society organizations have welcomed the move,
-                    calling it a step in the right direction for democratic governance.
-                  </p>
-                  <p>
-                    Industry experts note that these developments could have far-reaching
-                    implications for the West African sub-region, with neighbouring countries
-                    closely monitoring Ghana&apos;s approach as a potential model for their own
-                    reform agendas.
-                  </p>
                 </div>
 
                 {/* Tags */}

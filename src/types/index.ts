@@ -20,7 +20,8 @@ export interface Article {
   title: string;
   slug: string;
   excerpt: string;
-  content?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  content?: any;
   featuredImage: string;
   category: Category;
   author: Author;
