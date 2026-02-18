@@ -14,7 +14,9 @@ export default async function Home() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <HeroSection leadStory={leadStory} topStories={topStories} />
+      {leadStory && (
+        <HeroSection leadStory={leadStory} topStories={topStories} />
+      )}
 
       {/* Main Content Area */}
       <section className="py-6 lg:py-8">

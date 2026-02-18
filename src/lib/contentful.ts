@@ -150,9 +150,7 @@ export async function getArticles(limit: number = 10): Promise<Article[]> {
         order: ["-sys.createdAt"],
         include: 2,
       });
-      if (entries.items.length > 0) {
-        return entries.items.map(transformArticle);
-      }
+      return entries.items.map(transformArticle);
     } catch (e) {
       console.warn("Contentful fetch failed, using mock data:", e);
     }
@@ -169,9 +167,7 @@ export async function getFeaturedArticles(): Promise<Article[]> {
         order: ["-sys.createdAt"],
         include: 2,
       });
-      if (entries.items.length > 0) {
-        return entries.items.map(transformArticle);
-      }
+      return entries.items.map(transformArticle);
     } catch (e) {
       console.warn("Contentful fetch failed, using mock data:", e);
     }
@@ -188,9 +184,7 @@ export async function getArticleBySlug(slug: string): Promise<Article | null> {
         limit: 1,
         include: 2,
       });
-      if (entries.items.length > 0) {
-        return transformArticle(entries.items[0]);
-      }
+      return entries.items.length > 0 ? transformArticle(entries.items[0]) : null;
     } catch (e) {
       console.warn("Contentful fetch failed, using mock data:", e);
     }
@@ -207,18 +201,15 @@ export async function getArticlesByCategory(categorySlug: string): Promise<Artic
         "fields.slug": categorySlug,
         limit: 1,
       });
-      if (catEntries.items.length > 0) {
-        const catId = catEntries.items[0].sys.id;
-        const entries = await client.getEntries({
-          content_type: "article",
-          "fields.category.sys.id": catId,
-          order: ["-sys.createdAt"],
-          include: 2,
-        });
-        if (entries.items.length > 0) {
-          return entries.items.map(transformArticle);
-        }
-      }
+      if (catEntries.items.length === 0) return [];
+      const catId = catEntries.items[0].sys.id;
+      const entries = await client.getEntries({
+        content_type: "article",
+        "fields.category.sys.id": catId,
+        order: ["-sys.createdAt"],
+        include: 2,
+      });
+      return entries.items.map(transformArticle);
     } catch (e) {
       console.warn("Contentful fetch failed, using mock data:", e);
     }
@@ -234,9 +225,7 @@ export async function getCategories(): Promise<Category[]> {
         order: ["fields.name"],
         limit: 100,
       });
-      if (entries.items.length > 0) {
-        return entries.items.map(transformCategory);
-      }
+      return entries.items.map(transformCategory);
     } catch (e) {
       console.warn("Contentful fetch failed, using mock data:", e);
     }
@@ -252,9 +241,7 @@ export async function getBreakingNews(): Promise<BreakingNews[]> {
         order: ["-sys.createdAt"],
         limit: 10,
       });
-      if (entries.items.length > 0) {
-        return entries.items.map(transformBreakingNews);
-      }
+      return entries.items.map(transformBreakingNews);
     } catch (e) {
       console.warn("Contentful fetch failed, using mock data:", e);
     }
@@ -271,9 +258,7 @@ export async function getTrendingArticles(limit: number = 5): Promise<Article[]>
         limit,
         include: 2,
       });
-      if (entries.items.length > 0) {
-        return entries.items.map(transformArticle);
-      }
+      return entries.items.map(transformArticle);
     } catch (e) {
       console.warn("Contentful fetch failed, using mock data:", e);
     }
