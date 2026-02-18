@@ -162,7 +162,8 @@ export async function getArticles(limit: number = 10): Promise<Article[]> {
       });
       return entries.items.map(transformArticle);
     } catch (e) {
-      console.warn("Contentful fetch failed, using mock data:", e);
+      console.warn("Contentful fetch failed:", e);
+      return [];
     }
   }
   return mockArticles.slice(0, limit);
@@ -179,7 +180,8 @@ export async function getFeaturedArticles(): Promise<Article[]> {
       });
       return entries.items.map(transformArticle);
     } catch (e) {
-      console.warn("Contentful fetch failed, using mock data:", e);
+      console.warn("Contentful fetch failed:", e);
+      return [];
     }
   }
   return mockArticles.filter((a) => a.isFeatured);
@@ -206,7 +208,8 @@ export async function getArticleBySlug(slug: string): Promise<Article | null> {
       }
       return entries.items.length > 0 ? transformArticle(entries.items[0]) : null;
     } catch (e) {
-      console.warn("Contentful fetch failed, using mock data:", e);
+      console.warn("Contentful fetch failed:", e);
+      return null;
     }
   }
   return mockArticles.find((a) => a.slug === slug) || null;
@@ -231,7 +234,8 @@ export async function getArticlesByCategory(categorySlug: string): Promise<Artic
       });
       return entries.items.map(transformArticle);
     } catch (e) {
-      console.warn("Contentful fetch failed, using mock data:", e);
+      console.warn("Contentful fetch failed:", e);
+      return [];
     }
   }
   return mockArticles.filter((a) => a.category.slug === categorySlug);
@@ -247,7 +251,8 @@ export async function getCategories(): Promise<Category[]> {
       });
       return entries.items.map(transformCategory);
     } catch (e) {
-      console.warn("Contentful fetch failed, using mock data:", e);
+      console.warn("Contentful fetch failed:", e);
+      return [];
     }
   }
   return mockCategories;
@@ -263,7 +268,8 @@ export async function getBreakingNews(): Promise<BreakingNews[]> {
       });
       return entries.items.map(transformBreakingNews);
     } catch (e) {
-      console.warn("Contentful fetch failed, using mock data:", e);
+      console.warn("Contentful fetch failed:", e);
+      return [];
     }
   }
   return mockBreakingNews;
@@ -280,7 +286,8 @@ export async function getTrendingArticles(limit: number = 5): Promise<Article[]>
       });
       return entries.items.map(transformArticle);
     } catch (e) {
-      console.warn("Contentful fetch failed, using mock data:", e);
+      console.warn("Contentful fetch failed:", e);
+      return [];
     }
   }
   return mockArticles.slice(0, limit);
