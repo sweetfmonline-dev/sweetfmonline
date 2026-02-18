@@ -74,12 +74,22 @@ function transformArticle(entry: Entry<EntrySkeletonType>): Article {
   };
 }
 
+function normalizeBreakingNewsUrl(raw?: string): string | undefined {
+  if (!raw) return undefined;
+  const trimmed = raw.trim();
+  if (!trimmed) return undefined;
+  // If it's a full URL or already starts with /, use as-is
+  if (trimmed.startsWith("/") || trimmed.startsWith("http")) return trimmed;
+  // Otherwise treat as an article slug
+  return `/article/${trimmed}`;
+}
+
 function transformBreakingNews(entry: Entry<EntrySkeletonType>): BreakingNews {
   const f = entry.fields;
   return {
     id: entry.sys.id,
     headline: (f.headline as string) || "",
-    url: (f.url as string) || undefined,
+    url: normalizeBreakingNewsUrl(f.url as string),
     timestamp: entry.sys.createdAt,
   };
 }
