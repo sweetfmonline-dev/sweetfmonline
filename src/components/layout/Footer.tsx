@@ -81,7 +81,6 @@ export function Footer() {
                 { label: "Contact Us", href: "/contact" },
                 { label: "Advertise With Us", href: "/advertise" },
                 { label: "Listen Live", href: "/live" },
-                { label: "Videos", href: "/media/videos" },
                 { label: "Podcasts", href: "/media/podcasts" },
                 { label: "Elections Centre", href: "/category/elections" },
                 { label: "Regional News", href: "/category/regional" },
