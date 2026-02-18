@@ -39,6 +39,19 @@ export interface BreakingNews {
   timestamp: string;
 }
 
+export type AdPosition = "sidebar" | "banner" | "in-article" | "header" | "footer";
+
+export interface Advertisement {
+  id: string;
+  name: string;
+  image: string;
+  url: string;
+  position: AdPosition;
+  isActive: boolean;
+  startDate?: string;
+  endDate?: string;
+}
+
 export interface WeatherData {
   location: string;
   temperature: number;

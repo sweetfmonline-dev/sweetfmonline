@@ -1,5 +1,5 @@
 import { createClient, type Entry, type Asset, type EntrySkeletonType } from "contentful";
-import type { Article, Author, Category, BreakingNews } from "@/types";
+import type { Article, Author, Category, BreakingNews, Advertisement, AdPosition } from "@/types";
 
 // ─── Contentful Client ──────────────────────────────────────────────
 const contentfulSpaceId = process.env.CONTENTFUL_SPACE_ID;
@@ -284,6 +284,47 @@ export async function getTrendingArticles(limit: number = 5): Promise<Article[]>
     }
   }
   return mockArticles.slice(0, limit);
+}
+
+function transformAdvertisement(entry: Entry<EntrySkeletonType>): Advertisement {
+  const f = entry.fields;
+  const imageAsset = f.image as Asset | undefined;
+  return {
+    id: entry.sys.id,
+    name: (f.name as string) || "",
+    image: imageAsset ? assetUrl(imageAsset) : "",
+    url: (f.url as string) || "#",
+    position: ((f.position as string) || "sidebar") as AdPosition,
+    isActive: (f.isActive as boolean) ?? true,
+    startDate: (f.startDate as string) || undefined,
+    endDate: (f.endDate as string) || undefined,
+  };
+}
+
+export async function getAdvertisements(position?: AdPosition): Promise<Advertisement[]> {
+  if (client) {
+    try {
+      const query: Record<string, unknown> = {
+        content_type: "advertisement",
+        "fields.isActive": true,
+        limit: 20,
+        include: 2,
+      };
+      if (position) query["fields.position"] = position;
+      const entries = await client.getEntries(query);
+      const now = new Date();
+      return entries.items
+        .map(transformAdvertisement)
+        .filter((ad) => {
+          if (ad.startDate && new Date(ad.startDate) > now) return false;
+          if (ad.endDate && new Date(ad.endDate) < now) return false;
+          return true;
+        });
+    } catch (e) {
+      console.warn("Contentful ad fetch failed:", e);
+    }
+  }
+  return [];
 }
 
 export { client };

@@ -2,8 +2,9 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Clock, Calendar, ArrowLeft, Share2, Facebook, Twitter, MessageCircle } from "lucide-react";
-import { getArticleBySlug, getTrendingArticles, getArticlesByCategory } from "@/lib/data";
+import { getArticleBySlug, getTrendingArticles, getArticlesByCategory, getAdvertisements } from "@/lib/data";
 import { TrendingSidebar, ArticleCard } from "@/components/news";
+import { AdBanner } from "@/components/ads";
 import { ArticleJsonLd } from "@/components/seo/ArticleJsonLd";
 import { formatDate, formatRelativeTime } from "@/lib/utils";
 import type { Metadata } from "next";
@@ -51,6 +52,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   const relatedArticles = (await getArticlesByCategory(article.category.slug)).filter(
     (a) => a.id !== article.id
   );
+  const inArticleAds = await getAdvertisements("in-article");
+  const sidebarAds = await getAdvertisements("sidebar");
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -184,6 +187,12 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                     Stakeholders have expressed optimism about the direction of the country,
                     while analysts urge caution and continued reform efforts.
                   </p>
+
+                  {/* In-Article Ad */}
+                  <div className="my-6">
+                    <AdBanner ad={inArticleAds[0] || null} position="in-article" />
+                  </div>
+
                   <p>
                     The government has reiterated its commitment to transparency and
                     accountability, promising regular updates to the public on the progress
@@ -246,7 +255,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
             {/* Sidebar */}
             <div className="lg:col-span-1">
-              <TrendingSidebar articles={trendingArticles} />
+              <TrendingSidebar articles={trendingArticles} ad={sidebarAds[0] || null} />
             </div>
           </div>
         </div>

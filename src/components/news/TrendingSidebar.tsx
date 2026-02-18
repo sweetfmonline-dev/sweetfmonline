@@ -4,14 +4,16 @@ import Link from "next/link";
 import { TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatRelativeTime } from "@/lib/utils";
-import type { Article } from "@/types";
+import { AdBanner } from "@/components/ads";
+import type { Article, Advertisement } from "@/types";
 
 interface TrendingSidebarProps {
   articles: Article[];
+  ad?: Advertisement | null;
   className?: string;
 }
 
-export function TrendingSidebar({ articles, className }: TrendingSidebarProps) {
+export function TrendingSidebar({ articles, ad, className }: TrendingSidebarProps) {
   return (
     <aside className={cn("bg-white rounded-lg border border-gray-100 p-4", className)}>
       {/* Header */}
@@ -54,14 +56,9 @@ export function TrendingSidebar({ articles, className }: TrendingSidebarProps) {
         ))}
       </ol>
 
-      {/* Ad Placeholder */}
+      {/* Sidebar Ad */}
       <div className="mt-6 pt-4 border-t border-gray-100">
-        <div className="bg-gray-100 rounded-lg h-64 flex items-center justify-center">
-          <div className="text-center text-gray-400">
-            <p className="text-xs uppercase tracking-wide font-medium">Advertisement</p>
-            <p className="text-sm mt-1">300 x 250</p>
-          </div>
-        </div>
+        <AdBanner ad={ad || null} position="sidebar" />
       </div>
     </aside>
   );

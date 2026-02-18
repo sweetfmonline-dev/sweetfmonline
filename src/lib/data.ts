@@ -1,4 +1,4 @@
-import type { Article, Author, BreakingNews, Category } from "@/types";
+import type { Article, Author, BreakingNews, Category, Advertisement, AdPosition } from "@/types";
 import {
   getArticleBySlug as getContentfulArticleBySlug,
   getArticles as getContentfulArticles,
@@ -7,6 +7,7 @@ import {
   getCategories as getContentfulCategories,
   getFeaturedArticles as getContentfulFeaturedArticles,
   getTrendingArticles as getContentfulTrendingArticles,
+  getAdvertisements as getContentfulAdvertisements,
 } from "@/lib/contentful";
 import { isSupabaseConfigured, supabaseRestFetch } from "@/lib/supabase";
 
@@ -309,4 +310,8 @@ export async function getTrendingArticles(limit: number = 5): Promise<Article[]>
   }
 
   return getContentfulTrendingArticles(limit);
+}
+
+export async function getAdvertisements(position?: AdPosition): Promise<Advertisement[]> {
+  return getContentfulAdvertisements(position);
 }

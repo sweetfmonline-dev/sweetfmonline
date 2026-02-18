@@ -1,5 +1,6 @@
 import { HeroSection, TrendingSidebar, ArticleCard } from "@/components/news";
-import { getFeaturedArticles, getArticles, getTrendingArticles } from "@/lib/data";
+import { getFeaturedArticles, getArticles, getTrendingArticles, getAdvertisements } from "@/lib/data";
+import { AdBanner } from "@/components/ads";
 
 export const revalidate = 30;
 
@@ -7,6 +8,8 @@ export default async function Home() {
   const featuredArticles = await getFeaturedArticles();
   const latestArticles = await getArticles(10);
   const trendingArticles = await getTrendingArticles(5);
+  const bannerAds = await getAdvertisements("banner");
+  const sidebarAds = await getAdvertisements("sidebar");
 
   const leadStory = featuredArticles[0];
   const topStories = featuredArticles.slice(1, 4);
@@ -17,6 +20,11 @@ export default async function Home() {
       {leadStory && (
         <HeroSection leadStory={leadStory} topStories={topStories} />
       )}
+
+      {/* Banner Ad */}
+      <div className="max-w-7xl mx-auto px-4 py-4">
+        <AdBanner ad={bannerAds[0] || null} position="banner" />
+      </div>
 
       {/* Main Content Area */}
       <section className="py-6 lg:py-8">
@@ -55,7 +63,7 @@ export default async function Home() {
 
             {/* Sidebar */}
             <div className="lg:col-span-1">
-              <TrendingSidebar articles={trendingArticles} />
+              <TrendingSidebar articles={trendingArticles} ad={sidebarAds[0] || null} />
             </div>
           </div>
         </div>

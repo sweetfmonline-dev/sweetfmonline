@@ -130,6 +130,24 @@ async function run() {
     ],
   });
 
+  // --- Advertisement ---
+  await upsertContentType("advertisement", {
+    name: "Advertisement",
+    displayField: "name",
+    fields: [
+      { id: "name", name: "Name", type: "Symbol", required: true },
+      { id: "image", name: "Image", type: "Link", linkType: "Asset", required: true },
+      { id: "url", name: "Click URL", type: "Symbol", required: true },
+      {
+        id: "position", name: "Position", type: "Symbol", required: true,
+        validations: [{ in: ["sidebar", "banner", "in-article", "header", "footer"] }],
+      },
+      { id: "isActive", name: "Active", type: "Boolean", required: true },
+      { id: "startDate", name: "Start Date", type: "Date", required: false },
+      { id: "endDate", name: "End Date", type: "Date", required: false },
+    ],
+  });
+
   // ─── 2. Seed Data ──────────────────────────────────────────────────
 
   console.log("\n🌱 Seeding data...");

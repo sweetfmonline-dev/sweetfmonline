@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Inter, Merriweather } from "next/font/google";
 import "./globals.css";
 import { Header, Footer } from "@/components/layout";
@@ -76,6 +77,14 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${merriweather.variable} antialiased bg-gray-50`}
       >
+        {process.env.NEXT_PUBLIC_ADSENSE_ID && (
+          <Script
+            async
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE_ID}`}
+            crossOrigin="anonymous"
+            strategy="afterInteractive"
+          />
+        )}
         <Header />
         <main>{children}</main>
         <Footer />
