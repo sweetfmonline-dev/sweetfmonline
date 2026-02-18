@@ -1,9 +1,10 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { Clock, Calendar, ArrowLeft, Share2, Facebook, Twitter, MessageCircle } from "lucide-react";
+import { Clock, Calendar, ArrowLeft } from "lucide-react";
 import { getArticleBySlug, getTrendingArticles, getArticlesByCategory, getAdvertisements } from "@/lib/data";
 import { TrendingSidebar, ArticleCard } from "@/components/news";
+import { ShareBar } from "@/components/news/ShareBar";
 import { AdBanner } from "@/components/ads";
 import { ArticleJsonLd } from "@/components/seo/ArticleJsonLd";
 import { formatDate, formatRelativeTime } from "@/lib/utils";
@@ -147,21 +148,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 </div>
 
                 {/* Share Bar */}
-                <div className="flex items-center gap-3 px-6 py-3 bg-gray-50 border-b border-gray-100">
-                  <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Share:</span>
-                  <button className="p-2 rounded-full bg-[#1877F2] text-white hover:opacity-80 transition-opacity" aria-label="Share on Facebook">
-                    <Facebook className="w-4 h-4" />
-                  </button>
-                  <button className="p-2 rounded-full bg-[#1DA1F2] text-white hover:opacity-80 transition-opacity" aria-label="Share on Twitter">
-                    <Twitter className="w-4 h-4" />
-                  </button>
-                  <button className="p-2 rounded-full bg-[#25D366] text-white hover:opacity-80 transition-opacity" aria-label="Share on WhatsApp">
-                    <MessageCircle className="w-4 h-4" />
-                  </button>
-                  <button className="p-2 rounded-full bg-gray-400 text-white hover:opacity-80 transition-opacity" aria-label="Copy link">
-                    <Share2 className="w-4 h-4" />
-                  </button>
-                </div>
+                <ShareBar title={article.title} slug={article.slug} />
 
                 {/* Featured Image */}
                 <div className="relative aspect-[16/9]">
