@@ -1,6 +1,8 @@
 import { HeroSection, TrendingSidebar, ArticleCard } from "@/components/news";
 import { getFeaturedArticles, getArticles, getTrendingArticles } from "@/lib/data";
 
+export const revalidate = 30;
+
 export default async function Home() {
   const featuredArticles = await getFeaturedArticles();
   const latestArticles = await getArticles(10);
