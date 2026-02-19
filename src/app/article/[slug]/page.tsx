@@ -6,6 +6,7 @@ import { getArticleBySlug, getTrendingArticles, getArticlesByCategory, getAdvert
 import { TrendingSidebar, ArticleCard } from "@/components/news";
 import { ShareBar } from "@/components/news/ShareBar";
 import { RichTextRenderer } from "@/components/news/RichTextRenderer";
+import { CommentsSection } from "@/components/news/CommentsSection";
 import { AdBanner } from "@/components/ads";
 import { ArticleJsonLd } from "@/components/seo/ArticleJsonLd";
 import { formatDate, formatRelativeTime } from "@/lib/utils";
@@ -190,6 +191,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                     ))}
                   </div>
                 )}
+              </div>
+
+              {/* Comments */}
+              <div className="mt-8">
+                <CommentsSection articleSlug={article.slug} />
               </div>
 
               {/* Related Articles */}
