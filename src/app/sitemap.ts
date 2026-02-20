@@ -4,7 +4,7 @@ import { getArticles, getCategories } from "@/lib/data";
 export const revalidate = 30;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = "https://sweetfmonline.com";
+  const baseUrl = "https://www.sweetfmonline.com";
 
   const articles = await getArticles(100);
   const categories = await getCategories();

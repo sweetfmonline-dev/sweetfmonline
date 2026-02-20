@@ -22,13 +22,24 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   const categories = await getCategories();
   const category = categories.find((c) => c.slug === primarySlug);
 
+  const catName = category?.name || formatSubCategory(primarySlug);
   const title = subSlug
-    ? `${formatSubCategory(subSlug)} — ${category?.name || primarySlug} | Sweet FM Online`
-    : `${category?.name || primarySlug} News | Sweet FM Online`;
+    ? `${formatSubCategory(subSlug)} — ${catName}`
+    : catName === "News" ? catName : `${catName} News`;
+
+  const canonicalUrl = subSlug
+    ? `https://www.sweetfmonline.com/category/${primarySlug}/${subSlug}`
+    : `https://www.sweetfmonline.com/category/${primarySlug}`;
 
   return {
     title,
-    description: `Latest ${category?.name || primarySlug} news from Sweet FM Online — Ghana's premier news portal.`,
+    description: `Latest ${catName.toLowerCase()} news and updates from Sweet FM Online.`,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      url: canonicalUrl,
+    },
   };
 }
 

@@ -23,12 +23,12 @@ export function ArticleJsonLd({ article }: ArticleJsonLdProps) {
       name: "Sweet FM Online",
       logo: {
         "@type": "ImageObject",
-        url: "https://sweetfmonline.com/sweet-fm-logo.png",
+        url: "https://www.sweetfmonline.com/sweet-fm-logo.png",
       },
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://sweetfmonline.com/article/${article.slug}`,
+      "@id": `https://www.sweetfmonline.com/article/${article.slug}`,
     },
     articleSection: article.category.name,
     keywords: article.tags?.join(", "),

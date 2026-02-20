@@ -3,7 +3,8 @@ User-agent: *
 Allow: /
 
 # Sitemaps
-Sitemap: https://sweetfmonline.com/sitemap.xml
+Sitemap: https://www.sweetfmonline.com/sitemap.xml
+Sitemap: https://www.sweetfmonline.com/news-sitemap.xml
 
 # Disallow admin/api routes
 Disallow: /api/

@@ -3,6 +3,7 @@ import Script from "next/script";
 import { Inter, Merriweather } from "next/font/google";
 import "./globals.css";
 import { Header, Footer } from "@/components/layout";
+import { GlobalJsonLd } from "@/components/seo/GlobalJsonLd";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -19,18 +20,20 @@ const merriweather = Merriweather({
 
 export const metadata: Metadata = {
   title: {
-    default: "Sweet FM Online | Ghana's Premier News Portal",
+    default: "Sweet FM Online — Ghana's Premier News Portal",
     template: "%s | Sweet FM Online",
   },
-  description: "Breaking news, politics, business, sports, and entertainment from Ghana and around the world. Sweet FM 106.5 - Your trusted source for news.",
+  description: "Breaking news, politics, business, sports & entertainment from Ghana. Sweet FM 106.5 — your trusted news source.",
   keywords: ["Ghana news", "Sweet FM", "breaking news", "politics", "business", "sports", "Accra", "106.5"],
-  metadataBase: new URL("https://sweetfmonline.com"),
-  // favicon.ico, icon.png, and apple-icon.png are auto-served from src/app/
+  metadataBase: new URL("https://www.sweetfmonline.com"),
+  alternates: {
+    canonical: "https://www.sweetfmonline.com",
+  },
   manifest: "/manifest.json",
   openGraph: {
-    title: "Sweet FM Online | Ghana's Premier News Portal",
-    description: "Breaking news, politics, business, sports, and entertainment from Ghana and around the world.",
-    url: "https://sweetfmonline.com",
+    title: "Sweet FM Online — Ghana's Premier News Portal",
+    description: "Breaking news, politics, business, sports & entertainment from Ghana.",
+    url: "https://www.sweetfmonline.com",
     siteName: "Sweet FM Online",
     locale: "en_GH",
     type: "website",
@@ -85,6 +88,7 @@ export default function RootLayout({
             strategy="afterInteractive"
           />
         )}
+        <GlobalJsonLd />
         <Header />
         <main>{children}</main>
         <Footer />

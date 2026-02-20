@@ -5,7 +5,13 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Listen Live | Sweet FM 106.5",
-  description: "Listen to Sweet FM 106.5 live from Twifo Praso, Central Region, Ghana. Your favourite radio station streaming 24/7.",
+  description: "Listen to Sweet FM 106.5 live from Twifo Praso, Central Region, Ghana. Streaming 24/7.",
+  alternates: {
+    canonical: "https://www.sweetfmonline.com/live",
+  },
+  openGraph: {
+    url: "https://www.sweetfmonline.com/live",
+  },
 };
 
 export default function LivePage() {
@@ -22,6 +28,7 @@ export default function LivePage() {
             <span className="text-sm font-semibold">LIVE NOW</span>
           </div>
 
+          <h1 className="sr-only">Listen Live — Sweet FM 106.5</h1>
           <Image
             src="/sweet-fm-logo.svg"
             alt="Sweet FM 106.5"

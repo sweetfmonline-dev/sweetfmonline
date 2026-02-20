@@ -22,12 +22,24 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
 
   if (!article) return { title: "Article Not Found" };
 
+  const shortTitle = article.title.length > 55
+    ? article.title.slice(0, 55).trimEnd() + "…"
+    : article.title;
+  const shortDesc = article.excerpt.length > 155
+    ? article.excerpt.slice(0, 155).trimEnd() + "…"
+    : article.excerpt;
+  const canonicalUrl = `https://www.sweetfmonline.com/article/${slug}`;
+
   return {
-    title: `${article.title} | Sweet FM Online`,
-    description: article.excerpt,
+    title: shortTitle,
+    description: shortDesc,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
       title: article.title,
-      description: article.excerpt,
+      description: shortDesc,
+      url: canonicalUrl,
       images: [article.featuredImage],
       type: "article",
       publishedTime: article.publishedAt,
@@ -36,7 +48,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
     twitter: {
       card: "summary_large_image",
       title: article.title,
-      description: article.excerpt,
+      description: shortDesc,
       images: [article.featuredImage],
     },
   };
