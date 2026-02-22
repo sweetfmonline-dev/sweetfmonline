@@ -48,7 +48,7 @@ export function ArticleCard({
           alt={article.title}
           fill
           priority={priority}
-          className="object-cover transition-transform duration-300 group-hover:scale-105"
+          className="object-cover object-top transition-transform duration-300 group-hover:scale-105"
           sizes={
             isLead
               ? "(max-width: 768px) 100vw, 66vw"
