@@ -165,7 +165,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 <ShareBar title={article.title} slug={article.slug} />
 
                 {/* Featured Image */}
-                <div className="relative aspect-[16/9]">
+                <div className="relative aspect-[4/3]">
                   <Image
                     src={article.featuredImage}
                     alt={article.title}
