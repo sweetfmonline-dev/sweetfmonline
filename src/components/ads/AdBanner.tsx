@@ -22,19 +22,27 @@ const sizeMap: Record<AdPosition, { width: number; height: number; label: string
 export function AdBanner({ ad, position, className }: AdBannerProps) {
   const size = sizeMap[position];
 
-  // No ad available — show placeholder
+  // No ad available — show subtle CTA
   if (!ad) {
     return (
       <div className={cn("flex flex-col items-center justify-center", className)}>
-        <div
-          className="bg-gray-100 rounded-lg flex items-center justify-center w-full"
+        <span className="text-[10px] text-gray-400 uppercase tracking-wider mb-1">
+          Advertisement
+        </span>
+        <a
+          href="/advertise"
+          className="bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200 rounded-lg flex flex-col items-center justify-center w-full hover:border-gray-300 transition-colors group"
           style={{ aspectRatio: `${size.width}/${size.height}`, maxWidth: size.width }}
         >
-          <div className="text-center text-gray-400">
-            <p className="text-xs uppercase tracking-wide font-medium">Advertisement</p>
-            <p className="text-sm mt-1">{size.label}</p>
+          <div className="text-center px-4">
+            <p className="text-sm font-semibold text-gray-700 group-hover:text-sweet-red transition-colors">
+              Your Ad Here
+            </p>
+            <p className="text-xs text-gray-500 mt-1">
+              Reach thousands of readers daily
+            </p>
           </div>
-        </div>
+        </a>
       </div>
     );
   }
