@@ -71,14 +71,14 @@ export function RadioPlayer() {
       </button>
 
       <p className="text-white font-semibold text-lg mb-1">
-        {isPlaying ? "Now Playing" : "Sweet FM 106.5"}
+        {hasStream ? (isPlaying ? "Now Playing" : "Sweet FM 106.5") : "Coming Soon"}
       </p>
       <p className="text-gray-400 text-sm mb-6">
         {hasStream
           ? isPlaying
             ? "Live from Twifo Praso, Central Region"
             : "Tap play to listen live"
-          : "Stream URL not configured — add NEXT_PUBLIC_RADIO_STREAM_URL to .env.local"}
+          : "Live streaming will be available soon. Stay tuned!"}
       </p>
 
       {/* Volume Control */}
