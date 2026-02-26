@@ -197,9 +197,11 @@ async function trySupabaseArticlesByCategory(categorySlug: string): Promise<Arti
 async function trySupabaseBreakingNews(): Promise<BreakingNews[] | null> {
   if (!isSupabaseConfigured) return null;
 
+  const fortyEightHoursAgo = new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString();
   const rows = await supabaseRestFetch<BreakingNewsRow>({
     table: "breaking_news",
     select: "id,headline,url,timestamp",
+    filters: { timestamp: `gte.${fortyEightHoursAgo}` },
     order: { column: "timestamp", ascending: false },
     limit: 10,
   });

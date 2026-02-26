@@ -193,10 +193,13 @@ export async function getCategories(): Promise<Category[]> {
 export async function getBreakingNews(): Promise<BreakingNews[]> {
   if (!client) return [];
   try {
+    const fortyEightHoursAgo = new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString();
     const entries = await client.getEntries({
       content_type: "breakingNews",
       order: ["-sys.createdAt"],
       limit: 10,
+      // @ts-ignore - Contentful types are strict but this works at runtime
+      "sys.createdAt[gte]": fortyEightHoursAgo,
     });
     return entries.items.map(transformBreakingNews);
   } catch (e) {
