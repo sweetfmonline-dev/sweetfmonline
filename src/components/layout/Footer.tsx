@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Facebook, Twitter, Instagram, Youtube, Mail, Phone, MapPin } from "lucide-react";
+import { NewsletterForm } from "@/components/newsletter/NewsletterForm";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -127,19 +128,7 @@ export function Footer() {
               <p className="text-gray-400 text-xs mb-3">
                 Get the latest news delivered to your inbox.
               </p>
-              <form className="flex gap-2">
-                <input
-                  type="email"
-                  placeholder="Your email"
-                  className="flex-1 px-3 py-2 bg-charcoal-light border border-charcoal-lighter rounded text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-sweet-red"
-                />
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-sweet-red hover:bg-sweet-red-dark text-white text-sm font-semibold rounded transition-colors"
-                >
-                  Subscribe
-                </button>
-              </form>
+              <NewsletterForm />
             </div>
           </div>
         </div>
