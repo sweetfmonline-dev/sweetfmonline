@@ -17,7 +17,8 @@ export default async function Home() {
   return (
     <div className="min-h-screen bg-gray-50">
       <h1 className="sr-only">Sweet FM Online — Ghana&apos;s Premier News Portal</h1>
-      {/* Hero Section */}
+      
+      {/* Hero Section with Carousel */}
       {leadStory && (
         <HeroSection leadStory={leadStory} topStories={topStories} />
       )}

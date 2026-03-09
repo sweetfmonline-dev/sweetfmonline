@@ -3,19 +3,25 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navigation = [
-  { label: "News", href: "/category/news" },
-  { label: "Politics", href: "/category/politics" },
+  { 
+    label: "News", 
+    href: "/category/news",
+    dropdown: [
+      { label: "All News", href: "/category/news" },
+      { label: "Politics", href: "/category/politics" },
+      { label: "Health", href: "/category/health" },
+    ]
+  },
   { label: "Business", href: "/category/business" },
   { label: "Sports", href: "/category/sports" },
   { label: "Entertainment", href: "/category/entertainment" },
   { label: "World", href: "/category/world" },
   { label: "Opinion", href: "/category/opinion" },
   { label: "Technology", href: "/category/technology" },
-  { label: "Health", href: "/category/health" },
 ];
 
 interface MainNavProps {
@@ -24,6 +30,7 @@ interface MainNavProps {
 
 export function MainNav({ className }: MainNavProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
   return (
     <nav
@@ -49,13 +56,35 @@ export function MainNav({ className }: MainNavProps) {
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center gap-1">
             {navigation.map((item) => (
-              <Link
+              <div
                 key={item.label}
-                href={item.href}
-                className="px-3 py-2 text-sm font-semibold text-charcoal hover:text-sweet-red transition-colors"
+                className="relative"
+                onMouseEnter={() => item.dropdown && setOpenDropdown(item.label)}
+                onMouseLeave={() => setOpenDropdown(null)}
               >
-                {item.label}
-              </Link>
+                <Link
+                  href={item.href}
+                  className="px-3 py-2 text-sm font-semibold text-charcoal hover:text-sweet-red transition-colors flex items-center gap-1"
+                >
+                  {item.label}
+                  {item.dropdown && <ChevronDown className="w-4 h-4" />}
+                </Link>
+
+                {/* Dropdown Menu */}
+                {item.dropdown && openDropdown === item.label && (
+                  <div className="absolute top-full left-0 mt-0 bg-white border border-gray-200 rounded-lg shadow-lg py-2 min-w-[180px]">
+                    {item.dropdown.map((subItem) => (
+                      <Link
+                        key={subItem.label}
+                        href={subItem.href}
+                        className="block px-4 py-2 text-sm font-medium text-charcoal hover:text-sweet-red hover:bg-gray-50 transition-colors"
+                      >
+                        {subItem.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
             ))}
           </div>
 
@@ -91,14 +120,31 @@ export function MainNav({ className }: MainNavProps) {
         {mobileMenuOpen && (
           <div className="lg:hidden border-t border-gray-200 py-4">
             {navigation.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                className="block px-4 py-2.5 text-base font-semibold text-charcoal hover:text-sweet-red hover:bg-gray-50 transition-colors"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                {item.label}
-              </Link>
+              <div key={item.label}>
+                <Link
+                  href={item.href}
+                  className="block px-4 py-2.5 text-base font-semibold text-charcoal hover:text-sweet-red hover:bg-gray-50 transition-colors"
+                  onClick={() => !item.dropdown && setMobileMenuOpen(false)}
+                >
+                  {item.label}
+                </Link>
+                
+                {/* Mobile Dropdown Items */}
+                {item.dropdown && (
+                  <div className="pl-4 bg-gray-50">
+                    {item.dropdown.map((subItem) => (
+                      <Link
+                        key={subItem.label}
+                        href={subItem.href}
+                        className="block px-4 py-2 text-sm font-medium text-gray-600 hover:text-sweet-red transition-colors"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        {subItem.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
             ))}
 
             {/* Mobile Listen Live */}

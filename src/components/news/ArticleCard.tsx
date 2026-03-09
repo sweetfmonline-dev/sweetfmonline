@@ -7,12 +7,6 @@ import { cn } from "@/lib/utils";
 import { formatRelativeTime } from "@/lib/utils";
 import type { Article } from "@/types";
 
-function isWithin48Hours(publishedAt: string): boolean {
-  const fortyEightHoursAgo = Date.now() - 48 * 60 * 60 * 1000;
-  const publishedTime = new Date(publishedAt).getTime();
-  return publishedTime >= fortyEightHoursAgo;
-}
-
 interface ArticleCardProps {
   article: Article;
   variant?: "lead" | "featured" | "compact" | "horizontal";
@@ -54,7 +48,7 @@ export function ArticleCard({
           alt={article.title}
           fill
           priority={priority}
-          className="object-cover object-top transition-transform duration-300 group-hover:scale-105"
+          className="object-cover transition-transform duration-300 group-hover:scale-105"
           sizes={
             isLead
               ? "(max-width: 768px) 100vw, 66vw"
@@ -75,7 +69,7 @@ export function ArticleCard({
           </div>
         )}
         {/* Breaking Badge */}
-        {article.isBreaking && isWithin48Hours(article.publishedAt) && (
+        {article.isBreaking && (
           <div className="absolute top-3 right-3">
             <span className="px-2 py-1 text-xs font-bold uppercase tracking-wide bg-sweet-red text-white animate-pulse">
               Breaking
