@@ -56,6 +56,15 @@ export async function POST(request: NextRequest) {
     if (!response.ok) {
       const errorText = await response.text();
       
+      // Log detailed error for debugging
+      console.error("Supabase newsletter subscription error:", {
+        status: response.status,
+        statusText: response.statusText,
+        error: errorText,
+        url: `${supabaseUrl}/rest/v1/newsletter_subscribers`,
+        hasAnonKey: !!supabaseAnonKey,
+      });
+      
       // Check if email already exists
       if (response.status === 409 || errorText.includes("duplicate key")) {
         return NextResponse.json(
@@ -64,9 +73,12 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      console.error("Supabase error:", errorText);
+      // Return more specific error message
       return NextResponse.json(
-        { error: "Failed to subscribe. Please try again later." },
+        { 
+          error: "Failed to subscribe. Please try again later.",
+          details: process.env.NODE_ENV === 'development' ? errorText : undefined
+        },
         { status: 500 }
       );
     }
