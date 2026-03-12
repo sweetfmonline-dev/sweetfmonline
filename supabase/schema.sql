@@ -24,21 +24,22 @@ create table if not exists public.authors (
   updated_at timestamptz not null default now()
 );
 
-create table if not exists public.articles (
-  id uuid primary key default gen_random_uuid(),
-  title text not null,
-  slug text not null unique,
-  excerpt text not null,
-  content text,
-  featured_image text not null,
-  category_id uuid not null references public.categories(id) on delete restrict,
-  author_id uuid not null references public.authors(id) on delete restrict,
-  published_at timestamptz not null default now(),
-  updated_at timestamptz not null default now(),
-  is_breaking boolean not null default false,
-  is_featured boolean not null default false,
-  read_time integer,
-  tags text[] not null default '{}'
+CREATE TABLE IF NOT EXISTS public.articles (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  title VARCHAR(500) NOT NULL,
+  slug VARCHAR(255) UNIQUE NOT NULL,
+  excerpt TEXT NOT NULL,
+  content TEXT,
+  featured_image VARCHAR(1000) NOT NULL,
+  published_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+  updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+  is_breaking BOOLEAN NOT NULL DEFAULT FALSE,
+  is_featured BOOLEAN NOT NULL DEFAULT FALSE,
+  read_time INTEGER,
+  tags TEXT[] NOT NULL DEFAULT '{}',
+  category_id UUID REFERENCES public.categories(id) ON DELETE SET NULL,
+  author_id UUID REFERENCES public.authors(id) ON DELETE SET NULL,
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
 );
 
 create table if not exists public.breaking_news (

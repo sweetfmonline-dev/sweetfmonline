@@ -209,108 +209,124 @@ async function trySupabaseBreakingNews(): Promise<BreakingNews[] | null> {
 }
 
 export const getArticles = cache(async (limit: number = 10): Promise<Article[]> => {
+  // Try Supabase first (primary source)
+  if (isSupabaseConfigured) {
+    try {
+      const articles = await trySupabaseArticles(limit);
+      if (articles !== null && articles.length > 0) return articles;
+    } catch (e) {
+      console.warn("Supabase fetch failed, falling back to Contentful:", e);
+    }
+  }
+
+  // Fallback to Contentful
   if (isContentfulConfigured) {
     return getContentfulArticles(limit);
   }
 
-  try {
-    const articles = await trySupabaseArticles(limit);
-    if (articles !== null) return articles;
-  } catch (e) {
-    console.warn("Supabase fetch failed, falling back to Contentful:", e);
-  }
-
-  return getContentfulArticles(limit);
+  return [];
 });
 
 export const getFeaturedArticles = cache(async (): Promise<Article[]> => {
+  if (isSupabaseConfigured) {
+    try {
+      const articles = await trySupabaseFeaturedArticles();
+      if (articles !== null && articles.length > 0) return articles;
+    } catch (e) {
+      console.warn("Supabase fetch failed, falling back to Contentful:", e);
+    }
+  }
+
   if (isContentfulConfigured) {
     return getContentfulFeaturedArticles();
   }
 
-  try {
-    const articles = await trySupabaseFeaturedArticles();
-    if (articles !== null) return articles;
-  } catch (e) {
-    console.warn("Supabase fetch failed, falling back to Contentful:", e);
-  }
-
-  return getContentfulFeaturedArticles();
+  return [];
 });
 
 export const getArticleBySlug = cache(async (slug: string): Promise<Article | null> => {
+  if (isSupabaseConfigured) {
+    try {
+      const article = await trySupabaseArticleBySlug(slug);
+      if (article !== null) return article;
+    } catch (e) {
+      console.warn("Supabase fetch failed, falling back to Contentful:", e);
+    }
+  }
+
   if (isContentfulConfigured) {
     return getContentfulArticleBySlug(slug);
   }
 
-  try {
-    const article = await trySupabaseArticleBySlug(slug);
-    if (article !== null) return article;
-  } catch (e) {
-    console.warn("Supabase fetch failed, falling back to Contentful:", e);
-  }
-
-  return getContentfulArticleBySlug(slug);
+  return null;
 });
 
 export const getArticlesByCategory = cache(async (categorySlug: string): Promise<Article[]> => {
+  if (isSupabaseConfigured) {
+    try {
+      const articles = await trySupabaseArticlesByCategory(categorySlug);
+      if (articles !== null && articles.length > 0) return articles;
+    } catch (e) {
+      console.warn("Supabase fetch failed, falling back to Contentful:", e);
+    }
+  }
+
   if (isContentfulConfigured) {
     return getContentfulArticlesByCategory(categorySlug);
   }
 
-  try {
-    const articles = await trySupabaseArticlesByCategory(categorySlug);
-    if (articles !== null) return articles;
-  } catch (e) {
-    console.warn("Supabase fetch failed, falling back to Contentful:", e);
-  }
-
-  return getContentfulArticlesByCategory(categorySlug);
+  return [];
 });
 
 export const getCategories = cache(async (): Promise<Category[]> => {
+  if (isSupabaseConfigured) {
+    try {
+      const categories = await trySupabaseCategories();
+      if (categories !== null && categories.length > 0) return categories;
+    } catch (e) {
+      console.warn("Supabase fetch failed, falling back to Contentful:", e);
+    }
+  }
+
   if (isContentfulConfigured) {
     return getContentfulCategories();
   }
 
-  try {
-    const categories = await trySupabaseCategories();
-    if (categories !== null) return categories;
-  } catch (e) {
-    console.warn("Supabase fetch failed, falling back to Contentful:", e);
-  }
-
-  return getContentfulCategories();
+  return [];
 });
 
 export const getBreakingNews = cache(async (): Promise<BreakingNews[]> => {
+  if (isSupabaseConfigured) {
+    try {
+      const news = await trySupabaseBreakingNews();
+      if (news !== null) return news;
+    } catch (e) {
+      console.warn("Supabase fetch failed, falling back to Contentful:", e);
+    }
+  }
+
   if (isContentfulConfigured) {
     return getContentfulBreakingNews();
   }
 
-  try {
-    const news = await trySupabaseBreakingNews();
-    if (news !== null) return news;
-  } catch (e) {
-    console.warn("Supabase fetch failed, falling back to Contentful:", e);
-  }
-
-  return getContentfulBreakingNews();
+  return [];
 });
 
 export const getTrendingArticles = cache(async (limit: number = 5): Promise<Article[]> => {
+  if (isSupabaseConfigured) {
+    try {
+      const articles = await trySupabaseArticles(limit);
+      if (articles !== null && articles.length > 0) return articles;
+    } catch (e) {
+      console.warn("Supabase fetch failed, falling back to Contentful:", e);
+    }
+  }
+
   if (isContentfulConfigured) {
     return getContentfulTrendingArticles(limit);
   }
 
-  try {
-    const articles = await trySupabaseArticles(limit);
-    if (articles !== null) return articles;
-  } catch (e) {
-    console.warn("Supabase fetch failed, falling back to Contentful:", e);
-  }
-
-  return getContentfulTrendingArticles(limit);
+  return [];
 });
 
 export const getAdvertisements = cache(async (position?: AdPosition): Promise<Advertisement[]> => {
