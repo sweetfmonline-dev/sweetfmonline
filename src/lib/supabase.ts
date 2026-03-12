@@ -47,7 +47,7 @@ export async function supabaseRestFetch<T>({
       Authorization: `Bearer ${anonKey}`,
       Accept: "application/json",
     },
-    next: { revalidate: 60 },
+    next: { revalidate: 300 },
   });
 
   if (!response.ok) {

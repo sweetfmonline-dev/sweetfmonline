@@ -43,8 +43,8 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   };
 }
 
-// Revalidate category pages every 60 seconds (ISR)
-export const revalidate = 30;
+// Revalidate category pages every 5 minutes (ISR)
+export const revalidate = 300;
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { slug } = await params;

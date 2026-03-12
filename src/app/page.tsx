@@ -2,7 +2,7 @@ import { HeroSection, TrendingSidebar, ArticleCard } from "@/components/news";
 import { getFeaturedArticles, getArticles, getTrendingArticles, getAdvertisements } from "@/lib/data";
 import { AdBanner } from "@/components/ads";
 
-export const revalidate = 30;
+export const revalidate = 300;
 
 export default async function Home() {
   const featuredArticles = await getFeaturedArticles();

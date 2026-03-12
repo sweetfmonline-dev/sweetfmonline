@@ -1,3 +1,4 @@
+import { cache } from "react";
 import type { Article, Author, BreakingNews, Category, Advertisement, AdPosition } from "@/types";
 import {
   getArticleBySlug as getContentfulArticleBySlug,
@@ -207,7 +208,7 @@ async function trySupabaseBreakingNews(): Promise<BreakingNews[] | null> {
   return rows.length > 0 ? rows.map(mapBreakingNews) : [];
 }
 
-export async function getArticles(limit: number = 10): Promise<Article[]> {
+export const getArticles = cache(async (limit: number = 10): Promise<Article[]> => {
   if (isContentfulConfigured) {
     return getContentfulArticles(limit);
   }
@@ -220,9 +221,9 @@ export async function getArticles(limit: number = 10): Promise<Article[]> {
   }
 
   return getContentfulArticles(limit);
-}
+});
 
-export async function getFeaturedArticles(): Promise<Article[]> {
+export const getFeaturedArticles = cache(async (): Promise<Article[]> => {
   if (isContentfulConfigured) {
     return getContentfulFeaturedArticles();
   }
@@ -235,9 +236,9 @@ export async function getFeaturedArticles(): Promise<Article[]> {
   }
 
   return getContentfulFeaturedArticles();
-}
+});
 
-export async function getArticleBySlug(slug: string): Promise<Article | null> {
+export const getArticleBySlug = cache(async (slug: string): Promise<Article | null> => {
   if (isContentfulConfigured) {
     return getContentfulArticleBySlug(slug);
   }
@@ -250,9 +251,9 @@ export async function getArticleBySlug(slug: string): Promise<Article | null> {
   }
 
   return getContentfulArticleBySlug(slug);
-}
+});
 
-export async function getArticlesByCategory(categorySlug: string): Promise<Article[]> {
+export const getArticlesByCategory = cache(async (categorySlug: string): Promise<Article[]> => {
   if (isContentfulConfigured) {
     return getContentfulArticlesByCategory(categorySlug);
   }
@@ -265,9 +266,9 @@ export async function getArticlesByCategory(categorySlug: string): Promise<Artic
   }
 
   return getContentfulArticlesByCategory(categorySlug);
-}
+});
 
-export async function getCategories(): Promise<Category[]> {
+export const getCategories = cache(async (): Promise<Category[]> => {
   if (isContentfulConfigured) {
     return getContentfulCategories();
   }
@@ -280,9 +281,9 @@ export async function getCategories(): Promise<Category[]> {
   }
 
   return getContentfulCategories();
-}
+});
 
-export async function getBreakingNews(): Promise<BreakingNews[]> {
+export const getBreakingNews = cache(async (): Promise<BreakingNews[]> => {
   if (isContentfulConfigured) {
     return getContentfulBreakingNews();
   }
@@ -295,9 +296,9 @@ export async function getBreakingNews(): Promise<BreakingNews[]> {
   }
 
   return getContentfulBreakingNews();
-}
+});
 
-export async function getTrendingArticles(limit: number = 5): Promise<Article[]> {
+export const getTrendingArticles = cache(async (limit: number = 5): Promise<Article[]> => {
   if (isContentfulConfigured) {
     return getContentfulTrendingArticles(limit);
   }
@@ -310,8 +311,8 @@ export async function getTrendingArticles(limit: number = 5): Promise<Article[]>
   }
 
   return getContentfulTrendingArticles(limit);
-}
+});
 
-export async function getAdvertisements(position?: AdPosition): Promise<Advertisement[]> {
+export const getAdvertisements = cache(async (position?: AdPosition): Promise<Advertisement[]> => {
   return getContentfulAdvertisements(position);
-}
+});

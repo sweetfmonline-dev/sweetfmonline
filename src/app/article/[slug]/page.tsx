@@ -54,8 +54,8 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
   };
 }
 
-// Revalidate article pages every 60 seconds (ISR)
-export const revalidate = 30;
+// Revalidate article pages every 10 minutes (ISR)
+export const revalidate = 600;
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
   const { slug } = await params;

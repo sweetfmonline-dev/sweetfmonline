@@ -1,6 +1,6 @@
 import { getArticles } from "@/lib/data";
 
-export const revalidate = 30;
+export const revalidate = 3600;
 
 export async function GET() {
   const articles = await getArticles(100);
