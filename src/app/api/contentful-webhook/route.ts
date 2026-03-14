@@ -225,8 +225,9 @@ async function syncArticle(entryId: string, fields: Record<string, any>, sys: an
   const slug = (fields.slug?.[locale] || "").trim();
   if (!slug) { console.log(`Article ${entryId}: empty slug, skipping`); return; }
 
-  // Look up featured image URL from Supabase assets table
-  const featuredImageUrl = await lookupAssetUrl(fields.featuredImage?.[locale]);
+  // Prefer featuredImageUrl text field (Supabase Storage URL), fallback to asset lookup
+  const directUrl = fields.featuredImageUrl?.[locale] || null;
+  const featuredImageUrl = directUrl || await lookupAssetUrl(fields.featuredImage?.[locale]);
   const categoryId = fields.category?.[locale]?.sys?.id || null;
   const authorId = fields.author?.[locale]?.sys?.id || null;
 
