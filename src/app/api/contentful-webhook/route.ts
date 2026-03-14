@@ -73,10 +73,15 @@ async function supabaseDelete(table: string, id: string) {
 
 export async function POST(request: NextRequest) {
   try {
-    // Verify webhook secret
+    // Verify webhook secret (supports Authorization header OR ?secret= query param)
     const authHeader = request.headers.get("authorization");
-    if (!WEBHOOK_SECRET || authHeader !== `Bearer ${WEBHOOK_SECRET}`) {
-      console.error("Webhook auth failed. Header:", authHeader ? "present" : "missing");
+    const querySecret = new URL(request.url).searchParams.get("secret");
+    const isAuthorized =
+      WEBHOOK_SECRET &&
+      (authHeader === `Bearer ${WEBHOOK_SECRET}` || querySecret === WEBHOOK_SECRET);
+
+    if (!isAuthorized) {
+      console.error("Webhook auth failed. Header:", authHeader ? "present" : "missing", "Query:", querySecret ? "present" : "missing");
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
