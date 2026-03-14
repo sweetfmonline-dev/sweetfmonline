@@ -4,28 +4,26 @@ import { revalidatePath } from "next/cache";
 const WEBHOOK_SECRET = process.env.CONTENTFUL_WEBHOOK_SECRET;
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
-const CONTENTFUL_SPACE_ID = process.env.CONTENTFUL_SPACE_ID;
-const CONTENTFUL_MGMT_TOKEN = process.env.CONTENTFUL_MANAGEMENT_TOKEN;
 
-const CMA_BASE = `https://api.contentful.com/spaces/${CONTENTFUL_SPACE_ID}/environments/master`;
 const locale = "en-US";
 
 // ── Helpers ─────────────────────────────────────────────────────────
 
-async function cmaFetch(path: string): Promise<any> {
-  const res = await fetch(`${CMA_BASE}${path}`, {
-    headers: { Authorization: `Bearer ${CONTENTFUL_MGMT_TOKEN}` },
-  });
-  if (!res.ok) return null;
-  return res.json();
-}
-
-async function resolveAssetUrl(assetLink: any): Promise<string | null> {
-  if (!assetLink?.sys?.id || !CONTENTFUL_MGMT_TOKEN) return null;
+async function lookupAssetUrl(assetLink: any): Promise<string | null> {
+  if (!assetLink?.sys?.id) return null;
   try {
-    const asset = await cmaFetch(`/assets/${assetLink.sys.id}`);
-    const fileUrl = asset?.fields?.file?.[locale]?.url;
-    return fileUrl ? `https:${fileUrl}` : null;
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/assets?id=eq.${assetLink.sys.id}&select=url&limit=1`,
+      {
+        headers: {
+          apikey: SUPABASE_SERVICE_KEY!,
+          Authorization: `Bearer ${SUPABASE_SERVICE_KEY}`,
+        },
+      }
+    );
+    if (!res.ok) return null;
+    const rows = await res.json();
+    return rows[0]?.url || null;
   } catch {
     return null;
   }
@@ -94,10 +92,37 @@ export async function POST(request: NextRequest) {
     const topic = request.headers.get("x-contentful-topic") || "";
     // topic format: "ContentManagement.Entry.publish" or "ContentManagement.Entry.delete" etc.
     const isDelete = topic.includes("delete") || topic.includes("unpublish");
+    const isAsset = topic.includes("Asset");
 
     const payload = await request.json();
-    const contentType = payload.sys?.contentType?.sys?.id;
     const entryId = payload.sys?.id;
+
+    // Handle Asset events (store image URLs in assets table)
+    if (isAsset && entryId) {
+      if (isDelete) {
+        await supabaseDelete("assets", entryId);
+        console.log(`Deleted asset ${entryId}`);
+      } else {
+        const fileInfo = payload.fields?.file?.[locale];
+        if (fileInfo?.url) {
+          const url = fileInfo.url.startsWith("//") ? `https:${fileInfo.url}` : fileInfo.url;
+          await supabaseUpsert("assets", {
+            id: entryId,
+            url,
+            title: payload.fields?.title?.[locale] || null,
+            description: payload.fields?.description?.[locale] || null,
+            content_type: fileInfo.contentType || null,
+            width: fileInfo.details?.image?.width || null,
+            height: fileInfo.details?.image?.height || null,
+            file_size: fileInfo.details?.size || null,
+          });
+          console.log(`Stored asset ${entryId}: ${url}`);
+        }
+      }
+      return NextResponse.json({ success: true, type: "asset", entryId });
+    }
+
+    const contentType = payload.sys?.contentType?.sys?.id;
 
     console.log("Webhook received:", { topic, contentType, entryId, isDelete });
 
@@ -182,8 +207,8 @@ async function syncAuthor(entryId: string, fields: Record<string, any>) {
   const slug = (fields.slug?.[locale] || "").trim();
   if (!slug) { console.log(`Author ${entryId}: empty slug, skipping`); return; }
 
-  // Try to resolve avatar via CMA, fallback to null
-  const avatarUrl = await resolveAssetUrl(fields.avatar?.[locale]);
+  // Look up avatar URL from Supabase assets table
+  const avatarUrl = await lookupAssetUrl(fields.avatar?.[locale]);
 
   await supabaseUpsert("authors", {
     id: entryId,
@@ -200,8 +225,8 @@ async function syncArticle(entryId: string, fields: Record<string, any>, sys: an
   const slug = (fields.slug?.[locale] || "").trim();
   if (!slug) { console.log(`Article ${entryId}: empty slug, skipping`); return; }
 
-  // Try to resolve featured image via CMA, fallback to empty
-  const featuredImageUrl = await resolveAssetUrl(fields.featuredImage?.[locale]);
+  // Look up featured image URL from Supabase assets table
+  const featuredImageUrl = await lookupAssetUrl(fields.featuredImage?.[locale]);
   const categoryId = fields.category?.[locale]?.sys?.id || null;
   const authorId = fields.author?.[locale]?.sys?.id || null;
 
