@@ -165,16 +165,18 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 <ShareBar title={article.title} slug={article.slug} />
 
                 {/* Featured Image */}
-                <div className="relative aspect-[4/3]">
-                  <Image
-                    src={article.featuredImage}
-                    alt={article.title}
-                    fill
-                    priority
-                    className="object-cover object-top"
-                    sizes="(max-width: 768px) 100vw, 66vw"
-                  />
-                </div>
+                {article.featuredImage && (
+                  <div className="relative aspect-[4/3]">
+                    <Image
+                      src={article.featuredImage}
+                      alt={article.title}
+                      fill
+                      priority
+                      className="object-cover object-top"
+                      sizes="(max-width: 768px) 100vw, 66vw"
+                    />
+                  </div>
+                )}
 
                 {/* Article Body */}
                 <div className="px-6 py-8 font-serif text-lg leading-relaxed text-charcoal">

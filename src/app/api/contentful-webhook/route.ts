@@ -120,21 +120,27 @@ export async function POST(request: NextRequest) {
         console.log(`Deleted ${contentType} ${entryId} from ${table}`);
       }
     } else {
-      // Handle create/update/publish – fetch full entry from CMA
-      // The webhook payload fields may be incomplete (no resolved links),
-      // so we fetch the full entry from the Management API instead.
+      // Handle create/update/publish
+      // Use payload fields directly (no CMA call needed for text data).
+      // Only call CMA to resolve asset URLs (images), with graceful fallback.
+      const fields = payload.fields;
+      if (!fields) {
+        console.log("No fields in payload, skipping");
+        return NextResponse.json({ success: true, skipped: true });
+      }
+
       switch (contentType) {
         case "article":
-          await syncArticleFromCMA(entryId);
+          await syncArticle(entryId, fields, payload.sys);
           break;
         case "category":
-          await syncCategoryFromCMA(entryId);
+          await syncCategory(entryId, fields);
           break;
         case "author":
-          await syncAuthorFromCMA(entryId);
+          await syncAuthor(entryId, fields);
           break;
         case "breakingNews":
-          await syncBreakingNewsFromCMA(entryId);
+          await syncBreakingNews(entryId, fields);
           break;
         default:
           console.log(`Unhandled content type: ${contentType}`);
@@ -156,89 +162,74 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// ── Sync functions (fetch full entry from CMA) ─────────────────────
+// ── Sync functions (use payload data directly) ──────────────────────
 
-async function syncCategoryFromCMA(entryId: string) {
-  const entry = await cmaFetch(`/entries/${entryId}`);
-  if (!entry?.fields) { console.log(`Category ${entryId}: no fields`); return; }
-
-  const f = entry.fields;
-  const slug = (f.slug?.[locale] || "").trim();
+async function syncCategory(entryId: string, fields: Record<string, any>) {
+  const slug = (fields.slug?.[locale] || "").trim();
   if (!slug) { console.log(`Category ${entryId}: empty slug, skipping`); return; }
 
   await supabaseUpsert("categories", {
     id: entryId,
-    name: f.name?.[locale] || "",
+    name: fields.name?.[locale] || "",
     slug,
-    description: f.description?.[locale] || null,
-    color: f.color?.[locale] || null,
+    description: fields.description?.[locale] || null,
+    color: fields.color?.[locale] || null,
   });
   console.log(`Synced category: ${slug}`);
 }
 
-async function syncAuthorFromCMA(entryId: string) {
-  const entry = await cmaFetch(`/entries/${entryId}`);
-  if (!entry?.fields) { console.log(`Author ${entryId}: no fields`); return; }
-
-  const f = entry.fields;
-  const slug = (f.slug?.[locale] || "").trim();
+async function syncAuthor(entryId: string, fields: Record<string, any>) {
+  const slug = (fields.slug?.[locale] || "").trim();
   if (!slug) { console.log(`Author ${entryId}: empty slug, skipping`); return; }
 
-  const avatarUrl = await resolveAssetUrl(f.avatar?.[locale]);
+  // Try to resolve avatar via CMA, fallback to null
+  const avatarUrl = await resolveAssetUrl(fields.avatar?.[locale]);
 
   await supabaseUpsert("authors", {
     id: entryId,
-    name: f.name?.[locale] || "",
+    name: fields.name?.[locale] || "",
     slug,
     avatar: avatarUrl,
-    bio: f.bio?.[locale] || null,
-    role: f.role?.[locale] || null,
+    bio: fields.bio?.[locale] || null,
+    role: fields.role?.[locale] || null,
   });
   console.log(`Synced author: ${slug}`);
 }
 
-async function syncArticleFromCMA(entryId: string) {
-  const entry = await cmaFetch(`/entries/${entryId}`);
-  if (!entry?.fields) { console.log(`Article ${entryId}: no fields`); return; }
-
-  const f = entry.fields;
-  const slug = (f.slug?.[locale] || "").trim();
+async function syncArticle(entryId: string, fields: Record<string, any>, sys: any) {
+  const slug = (fields.slug?.[locale] || "").trim();
   if (!slug) { console.log(`Article ${entryId}: empty slug, skipping`); return; }
 
-  const featuredImageUrl = await resolveAssetUrl(f.featuredImage?.[locale]);
-  const categoryId = f.category?.[locale]?.sys?.id || null;
-  const authorId = f.author?.[locale]?.sys?.id || null;
+  // Try to resolve featured image via CMA, fallback to empty
+  const featuredImageUrl = await resolveAssetUrl(fields.featuredImage?.[locale]);
+  const categoryId = fields.category?.[locale]?.sys?.id || null;
+  const authorId = fields.author?.[locale]?.sys?.id || null;
 
   await supabaseUpsert("articles", {
     id: entryId,
-    title: f.title?.[locale] || "",
+    title: fields.title?.[locale] || "",
     slug,
-    excerpt: f.excerpt?.[locale] || "",
-    content: f.content?.[locale] ? JSON.stringify(f.content[locale]) : null,
+    excerpt: fields.excerpt?.[locale] || "",
+    content: fields.content?.[locale] ? JSON.stringify(fields.content[locale]) : null,
     featured_image: featuredImageUrl || "",
-    published_at: f.publishedAt?.[locale] || entry.sys.firstPublishedAt || new Date().toISOString(),
+    published_at: fields.publishedAt?.[locale] || sys?.firstPublishedAt || new Date().toISOString(),
     updated_at: new Date().toISOString(),
-    is_breaking: f.isBreaking?.[locale] || false,
-    is_featured: f.isFeatured?.[locale] || false,
-    read_time: f.readTime?.[locale] || null,
-    tags: f.tags?.[locale] || null,
+    is_breaking: fields.isBreaking?.[locale] || false,
+    is_featured: fields.isFeatured?.[locale] || false,
+    read_time: fields.readTime?.[locale] || null,
+    tags: fields.tags?.[locale] || null,
     category_id: categoryId,
     author_id: authorId,
   });
-  console.log(`Synced article: ${slug}`);
+  console.log(`Synced article: ${slug} (image: ${featuredImageUrl ? "yes" : "MISSING - CMA unavailable"})`);
 }
 
-async function syncBreakingNewsFromCMA(entryId: string) {
-  const entry = await cmaFetch(`/entries/${entryId}`);
-  if (!entry?.fields) { console.log(`BreakingNews ${entryId}: no fields`); return; }
-
-  const f = entry.fields;
-
+async function syncBreakingNews(entryId: string, fields: Record<string, any>) {
   await supabaseUpsert("breaking_news", {
     id: entryId,
-    headline: f.headline?.[locale] || "",
-    url: f.url?.[locale] || null,
-    timestamp: f.timestamp?.[locale] || new Date().toISOString(),
+    headline: fields.headline?.[locale] || "",
+    url: fields.url?.[locale] || null,
+    timestamp: fields.timestamp?.[locale] || new Date().toISOString(),
   });
-  console.log(`Synced breaking news: ${f.headline?.[locale]}`);
+  console.log(`Synced breaking news: ${fields.headline?.[locale]}`);
 }

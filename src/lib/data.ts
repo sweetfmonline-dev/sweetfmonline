@@ -85,7 +85,7 @@ function mapArticle(row: ArticleRow): Article {
     title: row.title,
     slug: row.slug,
     excerpt: row.excerpt,
-    content: row.content || undefined,
+    content: row.content ? (typeof row.content === "string" ? JSON.parse(row.content) : row.content) : undefined,
     featuredImage: row.featured_image,
     publishedAt: row.published_at,
     updatedAt: row.updated_at || undefined,
