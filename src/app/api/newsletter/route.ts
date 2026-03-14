@@ -3,6 +3,7 @@ import crypto from "crypto";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 const isSupabaseConfigured = !!supabaseUrl && !!supabaseAnonKey;
 
@@ -121,14 +122,15 @@ export async function GET(request: NextRequest) {
 
   try {
     if (action === "unsubscribe") {
-      // Update subscription status
+      // Use service role key to bypass RLS (anon can no longer read/update subscribers)
+      const serviceKey = supabaseServiceKey || supabaseAnonKey;
       const response = await fetch(
         `${supabaseUrl}/rest/v1/newsletter_subscribers?unsubscribe_token=eq.${token}`,
         {
           method: "PATCH",
           headers: {
-            apikey: supabaseAnonKey as string,
-            Authorization: `Bearer ${supabaseAnonKey}`,
+            apikey: serviceKey as string,
+            Authorization: `Bearer ${serviceKey}`,
             "Content-Type": "application/json",
             Prefer: "return=minimal",
           },
