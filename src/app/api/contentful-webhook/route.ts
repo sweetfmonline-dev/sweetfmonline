@@ -9,6 +9,67 @@ const locale = "en-US";
 
 // ── Helpers ─────────────────────────────────────────────────────────
 
+async function lookupAssetById(assetId: string): Promise<{ url: string; title?: string } | null> {
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/assets?id=eq.${assetId}&select=url,title&limit=1`,
+      {
+        headers: {
+          apikey: SUPABASE_SERVICE_KEY!,
+          Authorization: `Bearer ${SUPABASE_SERVICE_KEY}`,
+        },
+      }
+    );
+    if (!res.ok) return null;
+    const rows = await res.json();
+    return rows[0] || null;
+  } catch {
+    return null;
+  }
+}
+
+async function resolveRichTextAssets(doc: any): Promise<any> {
+  if (!doc || !doc.content) return doc;
+
+  const resolved = { ...doc, content: [...doc.content] };
+
+  for (let i = 0; i < resolved.content.length; i++) {
+    const node = resolved.content[i];
+
+    if (node.nodeType === "embedded-asset-block") {
+      const assetId = node.data?.target?.sys?.id;
+      if (assetId && !node.data?.target?.fields?.file) {
+        const asset = await lookupAssetById(assetId);
+        if (asset?.url) {
+          resolved.content[i] = {
+            ...node,
+            data: {
+              ...node.data,
+              target: {
+                ...node.data.target,
+                fields: {
+                  title: asset.title || "",
+                  file: {
+                    url: asset.url,
+                    contentType: "image/jpeg",
+                  },
+                },
+              },
+            },
+          };
+        }
+      }
+    }
+
+    // Recurse into nested content
+    if (node.content && Array.isArray(node.content)) {
+      resolved.content[i] = await resolveRichTextAssets(node);
+    }
+  }
+
+  return resolved;
+}
+
 async function lookupAssetUrl(assetLink: any): Promise<string | null> {
   if (!assetLink?.sys?.id) return null;
   try {
@@ -236,7 +297,7 @@ async function syncArticle(entryId: string, fields: Record<string, any>, sys: an
     title: fields.title?.[locale] || "",
     slug,
     excerpt: fields.excerpt?.[locale] || "",
-    content: fields.content?.[locale] ? JSON.stringify(fields.content[locale]) : null,
+    content: fields.content?.[locale] ? JSON.stringify(await resolveRichTextAssets(fields.content[locale])) : null,
     featured_image: featuredImageUrl || "",
     published_at: fields.publishedAt?.[locale] || sys?.firstPublishedAt || new Date().toISOString(),
     updated_at: new Date().toISOString(),
