@@ -1,19 +1,9 @@
 import { cache } from "react";
 import type { Article, Author, BreakingNews, Category, Advertisement, AdPosition } from "@/types";
-import {
-  getArticleBySlug as getContentfulArticleBySlug,
-  getArticles as getContentfulArticles,
-  getArticlesByCategory as getContentfulArticlesByCategory,
-  getBreakingNews as getContentfulBreakingNews,
-  getCategories as getContentfulCategories,
-  getFeaturedArticles as getContentfulFeaturedArticles,
-  getTrendingArticles as getContentfulTrendingArticles,
-  getAdvertisements as getContentfulAdvertisements,
-} from "@/lib/contentful";
 import { isSupabaseConfigured, supabaseRestFetch } from "@/lib/supabase";
 
-const isContentfulConfigured =
-  !!process.env.CONTENTFUL_SPACE_ID && !!process.env.CONTENTFUL_ACCESS_TOKEN;
+// Contentful CDA is disabled – all reads come from Supabase.
+// Contentful is only used via the Management API webhook for writes.
 
 interface CategoryRow {
   id: string;
@@ -209,126 +199,75 @@ async function trySupabaseBreakingNews(): Promise<BreakingNews[] | null> {
 }
 
 export const getArticles = cache(async (limit: number = 10): Promise<Article[]> => {
-  // Try Supabase first (primary source)
-  if (isSupabaseConfigured) {
-    try {
-      const articles = await trySupabaseArticles(limit);
-      if (articles !== null && articles.length > 0) return articles;
-    } catch (e) {
-      console.warn("Supabase fetch failed, falling back to Contentful:", e);
-    }
+  try {
+    const articles = await trySupabaseArticles(limit);
+    return articles ?? [];
+  } catch (e) {
+    console.error("getArticles failed:", e);
+    return [];
   }
-
-  // Fallback to Contentful
-  if (isContentfulConfigured) {
-    return getContentfulArticles(limit);
-  }
-
-  return [];
 });
 
 export const getFeaturedArticles = cache(async (): Promise<Article[]> => {
-  if (isSupabaseConfigured) {
-    try {
-      const articles = await trySupabaseFeaturedArticles();
-      if (articles !== null && articles.length > 0) return articles;
-    } catch (e) {
-      console.warn("Supabase fetch failed, falling back to Contentful:", e);
-    }
+  try {
+    const articles = await trySupabaseFeaturedArticles();
+    return articles ?? [];
+  } catch (e) {
+    console.error("getFeaturedArticles failed:", e);
+    return [];
   }
-
-  if (isContentfulConfigured) {
-    return getContentfulFeaturedArticles();
-  }
-
-  return [];
 });
 
 export const getArticleBySlug = cache(async (slug: string): Promise<Article | null> => {
-  if (isSupabaseConfigured) {
-    try {
-      const article = await trySupabaseArticleBySlug(slug);
-      if (article !== null) return article;
-    } catch (e) {
-      console.warn("Supabase fetch failed, falling back to Contentful:", e);
-    }
+  try {
+    return await trySupabaseArticleBySlug(slug);
+  } catch (e) {
+    console.error("getArticleBySlug failed:", e);
+    return null;
   }
-
-  if (isContentfulConfigured) {
-    return getContentfulArticleBySlug(slug);
-  }
-
-  return null;
 });
 
 export const getArticlesByCategory = cache(async (categorySlug: string): Promise<Article[]> => {
-  if (isSupabaseConfigured) {
-    try {
-      const articles = await trySupabaseArticlesByCategory(categorySlug);
-      if (articles !== null && articles.length > 0) return articles;
-    } catch (e) {
-      console.warn("Supabase fetch failed, falling back to Contentful:", e);
-    }
+  try {
+    const articles = await trySupabaseArticlesByCategory(categorySlug);
+    return articles ?? [];
+  } catch (e) {
+    console.error("getArticlesByCategory failed:", e);
+    return [];
   }
-
-  if (isContentfulConfigured) {
-    return getContentfulArticlesByCategory(categorySlug);
-  }
-
-  return [];
 });
 
 export const getCategories = cache(async (): Promise<Category[]> => {
-  if (isSupabaseConfigured) {
-    try {
-      const categories = await trySupabaseCategories();
-      if (categories !== null && categories.length > 0) return categories;
-    } catch (e) {
-      console.warn("Supabase fetch failed, falling back to Contentful:", e);
-    }
+  try {
+    const categories = await trySupabaseCategories();
+    return categories ?? [];
+  } catch (e) {
+    console.error("getCategories failed:", e);
+    return [];
   }
-
-  if (isContentfulConfigured) {
-    return getContentfulCategories();
-  }
-
-  return [];
 });
 
 export const getBreakingNews = cache(async (): Promise<BreakingNews[]> => {
-  if (isSupabaseConfigured) {
-    try {
-      const news = await trySupabaseBreakingNews();
-      if (news !== null) return news;
-    } catch (e) {
-      console.warn("Supabase fetch failed, falling back to Contentful:", e);
-    }
+  try {
+    const news = await trySupabaseBreakingNews();
+    return news ?? [];
+  } catch (e) {
+    console.error("getBreakingNews failed:", e);
+    return [];
   }
-
-  if (isContentfulConfigured) {
-    return getContentfulBreakingNews();
-  }
-
-  return [];
 });
 
 export const getTrendingArticles = cache(async (limit: number = 5): Promise<Article[]> => {
-  if (isSupabaseConfigured) {
-    try {
-      const articles = await trySupabaseArticles(limit);
-      if (articles !== null && articles.length > 0) return articles;
-    } catch (e) {
-      console.warn("Supabase fetch failed, falling back to Contentful:", e);
-    }
+  try {
+    const articles = await trySupabaseArticles(limit);
+    return articles ?? [];
+  } catch (e) {
+    console.error("getTrendingArticles failed:", e);
+    return [];
   }
-
-  if (isContentfulConfigured) {
-    return getContentfulTrendingArticles(limit);
-  }
-
-  return [];
 });
 
 export const getAdvertisements = cache(async (position?: AdPosition): Promise<Advertisement[]> => {
-  return getContentfulAdvertisements(position);
+  // Advertisements are not yet in Supabase – return empty for now
+  return [];
 });
