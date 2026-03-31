@@ -3,20 +3,8 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactCompiler: true,
   images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "images.unsplash.com",
-      },
-      {
-        protocol: "https",
-        hostname: "images.ctfassets.net",
-      },
-      {
-        protocol: "https",
-        hostname: "rmnhwgqsdxjvtbjmnrcn.supabase.co",
-      },
-    ],
+    loader: "custom",
+    loaderFile: "./src/lib/cloudinary-loader.ts",
   },
   async redirects() {
     return [
