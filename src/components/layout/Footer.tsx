@@ -50,14 +50,10 @@ export function Footer() {
             <ul className="space-y-2">
               {[
                 { label: "News", href: "/category/news" },
-                { label: "Politics", href: "/category/politics" },
                 { label: "Business", href: "/category/business" },
-                { label: "Sports", href: "/category/sports" },
-                { label: "Entertainment", href: "/category/entertainment" },
                 { label: "World", href: "/category/world" },
-                { label: "Opinion", href: "/category/opinion" },
-                { label: "Technology", href: "/category/technology" },
-                { label: "Health", href: "/category/health" },
+                { label: "Sport", href: "/category/sport" },
+                { label: "Entertainment", href: "/category/entertainment" },
               ].map((item) => (
                 <li key={item.href}>
                   <Link

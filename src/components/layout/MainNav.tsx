@@ -11,17 +11,39 @@ const navigation = [
     label: "News", 
     href: "/category/news",
     dropdown: [
-      { label: "All News", href: "/category/news" },
-      { label: "Politics", href: "/category/politics" },
-      { label: "Health", href: "/category/health" },
+      { label: "General News", href: "/category/news" },
+      { label: "Politics", href: "/category/news/politics" },
     ]
   },
-  { label: "Business", href: "/category/business" },
-  { label: "Sports", href: "/category/sports" },
-  { label: "Entertainment", href: "/category/entertainment" },
-  { label: "World", href: "/category/world" },
-  { label: "Opinion", href: "/category/opinion" },
-  { label: "Technology", href: "/category/technology" },
+  { 
+    label: "Business", 
+    href: "/category/business",
+    dropdown: [
+      { label: "Agribusiness", href: "/category/business/agribusiness" },
+      { label: "Banking and Finance", href: "/category/business/banking-and-finance" },
+      { label: "Energy", href: "/category/business/energy" },
+    ]
+  },
+  { 
+    label: "World", 
+    href: "/category/world",
+    dropdown: [
+      { label: "Africa", href: "/category/world/africa" },
+      { label: "Europe", href: "/category/world/europe" },
+      { label: "US", href: "/category/world/us" },
+      { label: "Global", href: "/category/world/global" },
+    ]
+  },
+  { label: "Sport", href: "/category/sport" },
+  { 
+    label: "Entertainment", 
+    href: "/category/entertainment",
+    dropdown: [
+      { label: "Music", href: "/category/entertainment/music" },
+      { label: "Movie", href: "/category/entertainment/movie" },
+      { label: "Fashion", href: "/category/entertainment/fashion" },
+    ]
+  },
 ];
 
 interface MainNavProps {
