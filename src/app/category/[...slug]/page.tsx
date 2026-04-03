@@ -55,7 +55,10 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
   if (!category) notFound();
 
-  const articles = await getArticlesByCategory(primarySlug);
+  // If subcategory is provided, fetch articles for that specific subcategory
+  // Otherwise, fetch all articles from the main category
+  const categorySlugToFetch = subSlug || primarySlug;
+  const articles = await getArticlesByCategory(categorySlugToFetch);
   const trendingArticles = await getTrendingArticles(5);
   const displayName = subSlug ? formatSubCategory(subSlug) : category.name;
 

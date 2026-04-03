@@ -54,6 +54,7 @@ export function Footer() {
                 { label: "World", href: "/category/world" },
                 { label: "Sport", href: "/category/sport" },
                 { label: "Entertainment", href: "/category/entertainment" },
+                { label: "Opinion", href: "/category/opinion" },
               ].map((item) => (
                 <li key={item.href}>
                   <Link

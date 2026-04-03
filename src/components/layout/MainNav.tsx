@@ -44,6 +44,7 @@ const navigation = [
       { label: "Fashion", href: "/category/entertainment/fashion" },
     ]
   },
+  { label: "Opinion", href: "/category/opinion" },
 ];
 
 interface MainNavProps {

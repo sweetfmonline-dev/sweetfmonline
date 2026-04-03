@@ -11,6 +11,7 @@ interface CategoryRow {
   slug: string;
   description: string | null;
   color: string | null;
+  parent_category_id: string | null;
 }
 
 interface AuthorRow {
@@ -108,7 +109,7 @@ function mapBreakingNews(row: BreakingNewsRow): BreakingNews {
 }
 
 const articleSelect =
-  "id,title,slug,excerpt,content,featured_image,published_at,updated_at,is_breaking,is_featured,read_time,tags,category:categories(id,name,slug,description,color),author:authors(id,name,slug,avatar,bio,role)";
+  "id,title,slug,excerpt,content,featured_image,published_at,updated_at,is_breaking,is_featured,read_time,tags,category:categories(id,name,slug,description,color,parent_category_id),author:authors(id,name,slug,avatar,bio,role)";
 
 async function trySupabaseCategories(): Promise<Category[] | null> {
   if (!isSupabaseConfigured) return null;
@@ -168,7 +169,7 @@ async function trySupabaseArticlesByCategory(categorySlug: string): Promise<Arti
 
   const categories = await supabaseRestFetch<CategoryRow>({
     table: "categories",
-    select: "id,slug,name,description,color",
+    select: "id,slug,name,description,color,parent_category_id",
     filters: { slug: `eq.${categorySlug}` },
     limit: 1,
   });
