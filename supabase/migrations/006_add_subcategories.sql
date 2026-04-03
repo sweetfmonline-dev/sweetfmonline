@@ -7,6 +7,7 @@ ALTER TABLE categories ADD COLUMN IF NOT EXISTS parent_category_id TEXT REFERENC
 CREATE INDEX IF NOT EXISTS idx_categories_parent ON categories(parent_category_id);
 
 -- Insert main categories (if they don't exist)
+-- Use slug as conflict target since that's the unique constraint
 INSERT INTO categories (id, name, slug, description, color, parent_category_id)
 VALUES 
   ('news', 'News', 'news', 'Latest news and current affairs', '#E60000', NULL),
@@ -15,17 +16,14 @@ VALUES
   ('sport', 'Sport', 'sport', 'Sports news and updates', '#FF6600', NULL),
   ('entertainment', 'Entertainment', 'entertainment', 'Entertainment and lifestyle', '#9900CC', NULL),
   ('opinion', 'Opinion', 'opinion', 'Opinion pieces and editorials', '#666666', NULL)
-ON CONFLICT (id) DO UPDATE SET
-  name = EXCLUDED.name,
-  description = EXCLUDED.description,
-  color = EXCLUDED.color;
+ON CONFLICT (slug) DO UPDATE SET
+  parent_category_id = EXCLUDED.parent_category_id;
 
 -- Insert subcategories for News
 INSERT INTO categories (id, name, slug, description, parent_category_id)
 VALUES 
   ('news-politics', 'Politics', 'politics', 'Political news and analysis', 'news')
-ON CONFLICT (id) DO UPDATE SET
-  name = EXCLUDED.name,
+ON CONFLICT (slug) DO UPDATE SET
   parent_category_id = EXCLUDED.parent_category_id;
 
 -- Insert subcategories for Business
@@ -34,8 +32,7 @@ VALUES
   ('business-agribusiness', 'Agribusiness', 'agribusiness', 'Agriculture and farming business', 'business'),
   ('business-banking-and-finance', 'Banking and Finance', 'banking-and-finance', 'Banking, finance, and markets', 'business'),
   ('business-energy', 'Energy', 'energy', 'Energy sector news', 'business')
-ON CONFLICT (id) DO UPDATE SET
-  name = EXCLUDED.name,
+ON CONFLICT (slug) DO UPDATE SET
   parent_category_id = EXCLUDED.parent_category_id;
 
 -- Insert subcategories for World
@@ -45,8 +42,7 @@ VALUES
   ('world-europe', 'Europe', 'europe', 'European news', 'world'),
   ('world-us', 'US', 'us', 'United States news', 'world'),
   ('world-global', 'Global', 'global', 'Global news and international affairs', 'world')
-ON CONFLICT (id) DO UPDATE SET
-  name = EXCLUDED.name,
+ON CONFLICT (slug) DO UPDATE SET
   parent_category_id = EXCLUDED.parent_category_id;
 
 -- Insert subcategories for Entertainment
@@ -55,6 +51,5 @@ VALUES
   ('entertainment-music', 'Music', 'music', 'Music news and releases', 'entertainment'),
   ('entertainment-movie', 'Movie', 'movie', 'Movie news and reviews', 'entertainment'),
   ('entertainment-fashion', 'Fashion', 'fashion', 'Fashion and style', 'entertainment')
-ON CONFLICT (id) DO UPDATE SET
-  name = EXCLUDED.name,
+ON CONFLICT (slug) DO UPDATE SET
   parent_category_id = EXCLUDED.parent_category_id;
