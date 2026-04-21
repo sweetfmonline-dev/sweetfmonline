@@ -82,3 +82,15 @@ body {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* Bolshevik Report — magazine drop cap */
+.bolshevik-article > p:first-of-type::first-letter {
+  font-family: 'Merriweather', Georgia, serif;
+  font-size: 5rem;
+  font-weight: 700;
+  color: #b00000;
+  float: left;
+  line-height: 0.9;
+  padding: 0.5rem 0.75rem 0 0;
+  margin-top: 0.25rem;
+}

@@ -45,6 +45,7 @@ const navigation = [
     ]
   },
   { label: "Opinion", href: "/category/opinion" },
+  { label: "Bolshevik Report", href: "/bolshevik-report" },
 ];
 
 interface MainNavProps {

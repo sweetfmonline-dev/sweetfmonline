@@ -23,6 +23,10 @@ export function ArticleCard({
   const isLead = variant === "lead";
   const isCompact = variant === "compact";
   const isHorizontal = variant === "horizontal";
+  const articleHref =
+    article.category?.slug === "bolshevik-report"
+      ? `/bolshevik-report/${article.slug}`
+      : `/article/${article.slug}`;
 
   return (
     <article
@@ -34,7 +38,7 @@ export function ArticleCard({
     >
       {/* Image Container */}
       <Link
-        href={`/article/${article.slug}`}
+        href={articleHref}
         className={cn(
           "relative overflow-hidden block flex-shrink-0",
           isLead && "aspect-[16/9]",
@@ -98,7 +102,7 @@ export function ArticleCard({
         )}
 
         {/* Title */}
-        <Link href={`/article/${article.slug}`}>
+        <Link href={articleHref}>
           <h3
             className={cn(
               "font-bold text-charcoal group-hover:text-sweet-red transition-colors leading-tight",

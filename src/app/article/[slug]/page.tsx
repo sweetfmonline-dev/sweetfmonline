@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Clock, Calendar, ArrowLeft } from "lucide-react";
@@ -62,6 +62,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   const article = await getArticleBySlug(slug);
 
   if (!article) notFound();
+
+  // Bolshevik Report articles use a dedicated magazine-style layout
+  if (article.category?.slug === "bolshevik-report") {
+    redirect(`/bolshevik-report/${article.slug}`);
+  }
 
   const trendingArticles = await getTrendingArticles(5);
   const relatedArticles = (await getArticlesByCategory(article.category.slug)).filter(
