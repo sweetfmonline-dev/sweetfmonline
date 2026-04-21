@@ -23,10 +23,12 @@ export function ArticleCard({
   const isLead = variant === "lead";
   const isCompact = variant === "compact";
   const isHorizontal = variant === "horizontal";
-  const articleHref =
-    article.category?.slug === "bolshevik-report"
-      ? `/bolshevik-report/${article.slug}`
-      : `/article/${article.slug}`;
+  const isOversight =
+    article.category?.slug === "oversight-pi" ||
+    article.category?.slug === "bolshevik-perspective";
+  const articleHref = isOversight
+    ? `/oversight-pi/${article.slug}`
+    : `/article/${article.slug}`;
 
   return (
     <article

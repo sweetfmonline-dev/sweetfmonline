@@ -83,12 +83,12 @@ body {
   overflow: hidden;
 }
 
-/* Bolshevik Report — magazine drop cap */
-.bolshevik-article > p:first-of-type::first-letter {
+/* OverSight PI — magazine drop cap */
+.oversight-article > p:first-of-type::first-letter {
   font-family: 'Merriweather', Georgia, serif;
   font-size: 5rem;
   font-weight: 700;
-  color: #b00000;
+  color: #E60000;
   float: left;
   line-height: 0.9;
   padding: 0.5rem 0.75rem 0 0;

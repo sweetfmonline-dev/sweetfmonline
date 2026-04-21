@@ -45,7 +45,14 @@ const navigation = [
     ]
   },
   { label: "Opinion", href: "/category/opinion" },
-  { label: "Bolshevik Report", href: "/bolshevik-report" },
+  {
+    label: "OverSight PI",
+    href: "/oversight-pi",
+    dropdown: [
+      { label: "All Reports", href: "/oversight-pi" },
+      { label: "Bolshevik Perspective", href: "/oversight-pi/bolshevik-perspective" },
+    ],
+  },
 ];
 
 interface MainNavProps {

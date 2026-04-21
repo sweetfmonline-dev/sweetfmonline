@@ -164,6 +164,38 @@ async function trySupabaseArticleBySlug(slug: string): Promise<Article | null> {
   return mapArticle(rows[0]);
 }
 
+async function trySupabaseArticlesByCategoryTree(parentSlug: string): Promise<Article[] | null> {
+  if (!isSupabaseConfigured) return null;
+
+  const parentRows = await supabaseRestFetch<CategoryRow>({
+    table: "categories",
+    select: "id,slug,name,description,color,parent_category_id",
+    filters: { slug: `eq.${parentSlug}` },
+    limit: 1,
+  });
+
+  if (parentRows.length === 0) return [];
+
+  const parentId = parentRows[0].id;
+
+  const subcatRows = await supabaseRestFetch<CategoryRow>({
+    table: "categories",
+    select: "id",
+    filters: { parent_category_id: `eq.${parentId}` },
+  });
+
+  const ids = [parentId, ...subcatRows.map((c) => c.id)];
+
+  const rows = await supabaseRestFetch<ArticleRow>({
+    table: "articles",
+    select: articleSelect,
+    filters: { category_id: `in.(${ids.join(",")})` },
+    order: { column: "published_at", ascending: false },
+  });
+
+  return rows.length > 0 ? rows.map(mapArticle) : [];
+}
+
 async function trySupabaseArticlesByCategory(categorySlug: string): Promise<Article[] | null> {
   if (!isSupabaseConfigured) return null;
 
@@ -234,6 +266,17 @@ export const getArticlesByCategory = cache(async (categorySlug: string): Promise
     return articles ?? [];
   } catch (e) {
     console.error("getArticlesByCategory failed:", e);
+    return [];
+  }
+});
+
+// Returns articles from the given category AND any of its subcategories
+export const getArticlesByCategoryTree = cache(async (parentSlug: string): Promise<Article[]> => {
+  try {
+    const articles = await trySupabaseArticlesByCategoryTree(parentSlug);
+    return articles ?? [];
+  } catch (e) {
+    console.error("getArticlesByCategoryTree failed:", e);
     return [];
   }
 });

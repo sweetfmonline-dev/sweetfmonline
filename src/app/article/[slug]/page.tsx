@@ -63,9 +63,12 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
   if (!article) notFound();
 
-  // Bolshevik Report articles use a dedicated magazine-style layout
-  if (article.category?.slug === "bolshevik-report") {
-    redirect(`/bolshevik-report/${article.slug}`);
+  // OverSight PI (and its Bolshevik Perspective subsection) use a dedicated magazine-style layout
+  if (
+    article.category?.slug === "oversight-pi" ||
+    article.category?.slug === "bolshevik-perspective"
+  ) {
+    redirect(`/oversight-pi/${article.slug}`);
   }
 
   const trendingArticles = await getTrendingArticles(5);

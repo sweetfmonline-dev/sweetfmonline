@@ -14,6 +14,16 @@ const nextConfig: NextConfig = {
         destination: "https://www.sweetfmonline.com/:path*",
         permanent: true,
       },
+      {
+        source: "/bolshevik-report",
+        destination: "/oversight-pi",
+        permanent: true,
+      },
+      {
+        source: "/bolshevik-report/:slug*",
+        destination: "/oversight-pi/:slug*",
+        permanent: true,
+      },
     ];
   },
 };
