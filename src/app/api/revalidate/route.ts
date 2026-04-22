@@ -21,6 +21,13 @@ export async function POST(request: NextRequest) {
     revalidatePath("/");
     revalidatePath("/article/[slug]", "page");
     revalidatePath("/category/[...slug]", "page");
+    revalidatePath("/oversight-pi");
+    revalidatePath("/oversight-pi/[slug]", "page");
+    revalidatePath("/oversight-pi/bolshevik-perspective");
+    revalidatePath("/oversight-pi/the-dossier");
+    revalidatePath("/oversight-pi/fact-check");
+    revalidatePath("/oversight-pi/the-long-read");
+    revalidatePath("/oversight-pi/the-forum");
     revalidatePath("/sitemap.xml");
 
     return NextResponse.json({ revalidated: true, now: Date.now() });
