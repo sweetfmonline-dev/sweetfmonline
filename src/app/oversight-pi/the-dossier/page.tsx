@@ -4,7 +4,7 @@ import { getArticlesByCategory } from "@/lib/data";
 import { OVERSIGHT_SUBSECTION_BY_SLUG } from "@/lib/oversight";
 import { SubsectionLanding } from "@/components/oversight/SubsectionLanding";
 
-const SLUG = "bolshevik-perspective";
+const SLUG = "the-dossier";
 const config = OVERSIGHT_SUBSECTION_BY_SLUG[SLUG];
 
 export const metadata: Metadata = {

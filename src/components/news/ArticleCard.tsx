@@ -6,6 +6,7 @@ import { Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatRelativeTime } from "@/lib/utils";
 import type { Article } from "@/types";
+import { isOversightCategory } from "@/lib/oversight";
 
 interface ArticleCardProps {
   article: Article;
@@ -23,10 +24,7 @@ export function ArticleCard({
   const isLead = variant === "lead";
   const isCompact = variant === "compact";
   const isHorizontal = variant === "horizontal";
-  const isOversight =
-    article.category?.slug === "oversight-pi" ||
-    article.category?.slug === "bolshevik-perspective";
-  const articleHref = isOversight
+  const articleHref = isOversightCategory(article.category?.slug)
     ? `/oversight-pi/${article.slug}`
     : `/article/${article.slug}`;
 

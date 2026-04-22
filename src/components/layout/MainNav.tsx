@@ -50,6 +50,10 @@ const navigation = [
     href: "/oversight-pi",
     dropdown: [
       { label: "All Reports", href: "/oversight-pi" },
+      { label: "The Dossier", href: "/oversight-pi/the-dossier" },
+      { label: "Fact Check", href: "/oversight-pi/fact-check" },
+      { label: "The Long Read", href: "/oversight-pi/the-long-read" },
+      { label: "The Forum", href: "/oversight-pi/the-forum" },
       { label: "Bolshevik Perspective", href: "/oversight-pi/bolshevik-perspective" },
     ],
   },

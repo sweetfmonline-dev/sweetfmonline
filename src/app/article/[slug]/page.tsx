@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Clock, Calendar, ArrowLeft } from "lucide-react";
 import { getArticleBySlug, getTrendingArticles, getArticlesByCategory, getAdvertisements } from "@/lib/data";
+import { isOversightCategory } from "@/lib/oversight";
 import { TrendingSidebar, ArticleCard } from "@/components/news";
 import { ShareBar } from "@/components/news/ShareBar";
 import { RichTextRenderer } from "@/components/news/RichTextRenderer";
@@ -63,11 +64,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
   if (!article) notFound();
 
-  // OverSight PI (and its Bolshevik Perspective subsection) use a dedicated magazine-style layout
-  if (
-    article.category?.slug === "oversight-pi" ||
-    article.category?.slug === "bolshevik-perspective"
-  ) {
+  // OverSight PI (and all its subsections) use a dedicated magazine-style layout
+  if (isOversightCategory(article.category?.slug)) {
     redirect(`/oversight-pi/${article.slug}`);
   }
 

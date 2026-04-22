@@ -10,9 +10,11 @@ import { OversightRichText } from "@/components/news/OversightRichText";
 import { ShareBar } from "@/components/news/ShareBar";
 import { ArticleJsonLd } from "@/components/seo/ArticleJsonLd";
 import { formatDate } from "@/lib/utils";
+import {
+  OVERSIGHT_CATEGORY_SLUGS,
+  OVERSIGHT_SUBSECTION_BY_SLUG,
+} from "@/lib/oversight";
 import type { Metadata } from "next";
-
-const OVERSIGHT_SLUGS = new Set(["oversight-pi", "bolshevik-perspective"]);
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -61,12 +63,12 @@ export default async function OversightArticlePage({ params }: PageProps) {
 
   if (!article) notFound();
 
-  // Only render this route for OverSight PI articles (including subcategories)
-  if (!article.category?.slug || !OVERSIGHT_SLUGS.has(article.category.slug)) {
+  // Only render this route for OverSight PI articles (parent + all subcategories)
+  if (!article.category?.slug || !OVERSIGHT_CATEGORY_SLUGS.has(article.category.slug)) {
     notFound();
   }
 
-  const isBolshevik = article.category.slug === "bolshevik-perspective";
+  const subsection = OVERSIGHT_SUBSECTION_BY_SLUG[article.category.slug];
 
   const related = (await getArticlesByCategoryTree("oversight-pi")).filter(
     (a) => a.id !== article.id
@@ -88,11 +90,11 @@ export default async function OversightArticlePage({ params }: PageProps) {
             </div>
           </Link>
           <Link
-            href={isBolshevik ? "/oversight-pi/bolshevik-perspective" : "/oversight-pi"}
+            href={subsection ? `/oversight-pi/${subsection.slug}` : "/oversight-pi"}
             className="text-xs uppercase tracking-wider hover:text-sweet-red transition-colors flex items-center gap-1"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            {isBolshevik ? "Bolshevik Perspective" : "All Reports"}
+            {subsection ? subsection.label : "All Reports"}
           </Link>
         </div>
       </header>
@@ -103,7 +105,7 @@ export default async function OversightArticlePage({ params }: PageProps) {
           <div className="flex items-center justify-center gap-3 mb-6">
             <div className="h-px w-8 bg-sweet-red"></div>
             <span className="text-xs uppercase tracking-[0.3em] text-sweet-red font-bold">
-              {isBolshevik ? "Bolshevik Perspective" : "OverSight PI"} ·{" "}
+              {subsection ? subsection.label : "OverSight PI"} ·{" "}
               {formatDate(article.publishedAt)}
             </span>
             <div className="h-px w-8 bg-sweet-red"></div>
@@ -151,9 +153,9 @@ export default async function OversightArticlePage({ params }: PageProps) {
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 1024px"
               />
-              {isBolshevik && (
+              {subsection && (
                 <div className="absolute top-4 left-4 bg-sweet-red text-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em]">
-                  Bolshevik Perspective
+                  {subsection.label}
                 </div>
               )}
             </div>
@@ -254,11 +256,12 @@ export default async function OversightArticlePage({ params }: PageProps) {
                         sizes="(max-width: 768px) 100vw, 33vw"
                       />
                     )}
-                    {rel.category?.slug === "bolshevik-perspective" && (
-                      <div className="absolute top-3 left-3 bg-sweet-red text-white px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.15em]">
-                        Bolshevik
-                      </div>
-                    )}
+                    {rel.category?.slug &&
+                      OVERSIGHT_SUBSECTION_BY_SLUG[rel.category.slug] && (
+                        <div className="absolute top-3 left-3 bg-sweet-red text-white px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.15em]">
+                          {OVERSIGHT_SUBSECTION_BY_SLUG[rel.category.slug].shortBadge}
+                        </div>
+                      )}
                   </div>
                   <h3 className="font-serif text-xl lg:text-2xl font-bold leading-tight group-hover:text-sweet-red transition-colors">
                     {rel.title}
