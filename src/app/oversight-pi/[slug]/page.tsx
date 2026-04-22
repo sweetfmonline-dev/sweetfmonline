@@ -66,13 +66,13 @@ function splitHeadline(title: string): { main: string; accent?: string } {
   return { main: title };
 }
 
-// Issue label: "Vol. XII · Issue 04 · April 2026 · Optional Tag"
-function buildIssueMeta(publishedAt: string, issueLabel?: string): string[] {
+// Issue label: either the editor-provided string, or auto "Vol. XII · Issue 04 · April 2026"
+function buildIssueMeta(publishedAt: string, issueLabel?: string): string {
+  if (issueLabel && issueLabel.trim()) return issueLabel.trim();
   const d = new Date(publishedAt);
   const year = d.getFullYear();
   const monthName = d.toLocaleString("en-US", { month: "long" });
   const month = String(d.getMonth() + 1).padStart(2, "0");
-  // Volume: year minus 2014 (Sweet FM digital start; tweak if needed)
   const volume = Math.max(1, year - 2014);
   const toRoman = (n: number): string => {
     const map: [number, string][] = [
@@ -85,13 +85,7 @@ function buildIssueMeta(publishedAt: string, issueLabel?: string): string[] {
     for (const [v, s] of map) { while (rem >= v) { out += s; rem -= v; } }
     return out;
   };
-  const parts = [
-    `Vol. ${toRoman(volume)}`,
-    `Issue ${month}`,
-    `${monthName} ${year}`,
-  ];
-  if (issueLabel) parts.push(issueLabel);
-  return parts;
+  return `Vol. ${toRoman(volume)} · Issue ${month} · ${monthName} ${year}`;
 }
 
 export default async function OversightArticlePage({ params }: PageProps) {
@@ -129,25 +123,13 @@ export default async function OversightArticlePage({ params }: PageProps) {
 
       {/* ── MASTHEAD ── */}
       <header className="fa-masthead">
-        <div>
-          <Link
-            href={subsection ? `/oversight-pi/${subsection.slug}` : "/oversight-pi"}
-            className="fa-masthead-logo"
-          >
-            OverSight<br />PI
-          </Link>
-          <div className="fa-masthead-tagline">
-            Investigations · Editorials · Analysis
-          </div>
-        </div>
-        <div className="fa-masthead-meta">
-          {issueMeta.map((part, i) => (
-            <span key={i}>
-              {part}
-              {i < issueMeta.length - 1 && <br />}
-            </span>
-          ))}
-        </div>
+        <Link
+          href={subsection ? `/oversight-pi/${subsection.slug}` : "/oversight-pi"}
+          className="fa-masthead-logo"
+        >
+          OverSight PI
+        </Link>
+        <div className="fa-masthead-meta">{issueMeta}</div>
       </header>
 
       {/* ── HERO ── */}
@@ -172,7 +154,7 @@ export default async function OversightArticlePage({ params }: PageProps) {
               {article.author?.name && (
                 <span>
                   <strong>By {article.author.name}</strong>
-                  {sectionLabel}
+                  {article.author.role || sectionLabel}
                 </span>
               )}
               <span>
@@ -190,19 +172,17 @@ export default async function OversightArticlePage({ params }: PageProps) {
 
           {article.featuredImage && (
             <div className="fa-hero-image-wrap">
-              <div className="fa-hero-accent-bar" aria-hidden="true" />
-              <div className="fa-hero-cover-frame">
-                <Image
-                  src={article.featuredImage}
-                  alt={article.title}
-                  fill
-                  priority
-                  className="fa-hero-cover"
-                  sizes="(max-width: 900px) 320px, 380px"
-                />
-              </div>
+              <Image
+                src={article.featuredImage}
+                alt={article.title}
+                width={760}
+                height={1013}
+                priority
+                className="fa-hero-cover"
+                sizes="(max-width: 900px) 320px, 380px"
+              />
               <p className="fa-hero-cover-caption">
-                Cover · {sectionLabel} · {formatDate(article.publishedAt)}
+                Cover · {sectionLabel}
               </p>
             </div>
           )}
@@ -233,6 +213,25 @@ export default async function OversightArticlePage({ params }: PageProps) {
               <OversightRichText content={article.content} />
             ) : (
               <p>{article.excerpt}</p>
+            )}
+
+            {/* Key Moments (inline, within article flow) */}
+            {hasTimeline && (
+              <section className="fa-timeline-section">
+                <h3 className="fa-section-title">Key Moments</h3>
+                <div className="fa-timeline">
+                  {timeline.map((item, i) => (
+                    <div className="fa-timeline-item" key={i}>
+                      <div className="fa-timeline-year">{item.year}</div>
+                      <div className={`fa-timeline-dot${item.highlight ? " gold" : ""}`} />
+                      <div className="fa-timeline-content">
+                        <h5>{item.title}</h5>
+                        <p>{item.description}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
             )}
 
             {/* Share */}
@@ -317,42 +316,13 @@ export default async function OversightArticlePage({ params }: PageProps) {
         </div>
       </div>
 
-      {/* ── TIMELINE (optional) ── */}
-      {hasTimeline && (
-        <>
-          <div className="fa-divider-band">
-            <div className="fa-divider-band-line" />
-            <div className="fa-divider-band-text">Timeline</div>
-            <div className="fa-divider-band-line" />
-          </div>
-
-          <section className="fa-timeline-section">
-            <div className="fa-timeline-inner">
-              <h3 className="fa-section-title">Key Moments</h3>
-              <div className="fa-timeline">
-                {timeline.map((item, i) => (
-                  <div className="fa-timeline-item" key={i}>
-                    <div className="fa-timeline-year">{item.year}</div>
-                    <div className={`fa-timeline-dot${item.highlight ? " gold" : ""}`} />
-                    <div className="fa-timeline-content">
-                      <h5>{item.title}</h5>
-                      <p>{item.description}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-        </>
-      )}
-
       {/* ── FOOTER STRIP ── */}
       <footer className="fa-footer-strip">
         <Link href="/oversight-pi" className="fa-footer-logo">
           OverSight PI
         </Link>
         <div className="fa-footer-copy">
-          © {new Date().getFullYear()} Sweet FM Online · {sectionLabel} · All Rights Reserved
+          © {new Date().getFullYear()} SweetFM Online · {sectionLabel} · All Rights Reserved
         </div>
       </footer>
     </div>

@@ -13,7 +13,7 @@ export async function GET() {
       <loc>https://www.sweetfmonline.com/article/${article.slug}</loc>
       <news:news>
         <news:publication>
-          <news:name>Sweet FM Online</news:name>
+          <news:name>SweetFM Online</news:name>
           <news:language>en</news:language>
         </news:publication>
         <news:publication_date>${pubDate}</news:publication_date>

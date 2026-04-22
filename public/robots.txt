@@ -1,4 +1,4 @@
-# Sweet FM Online - robots.txt
+# SweetFM Online - robots.txt
 User-agent: *
 Allow: /
 

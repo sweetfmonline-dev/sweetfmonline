@@ -16,7 +16,7 @@ export function Footer() {
             <Link href="/" className="mb-4 inline-block">
               <Image
                 src="/sweet-fm-logo.svg"
-                alt="Sweet FM 106.5"
+                alt="SweetFM 106.5"
                 width={240}
                 height={90}
                 className="h-20 lg:h-24 w-auto brightness-0 invert"
@@ -104,7 +104,7 @@ export function Footer() {
             <ul className="space-y-3">
               <li className="flex items-start gap-2 text-gray-400 text-sm">
                 <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                <span>Sweet FM House, Twifo Praso, Central Region, Ghana</span>
+                <span>SweetFM House, Twifo Praso, Central Region, Ghana</span>
               </li>
               <li className="flex items-center gap-2 text-gray-400 text-sm">
                 <Phone className="w-4 h-4 flex-shrink-0" />
@@ -136,7 +136,7 @@ export function Footer() {
       <div className="border-t border-charcoal-light">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-500">
-            <p>&copy; {currentYear} Sweet FM Online. All rights reserved.</p>
+            <p>&copy; {currentYear} SweetFM Online. All rights reserved.</p>
             <div className="flex items-center gap-4">
               <Link href="#" className="hover:text-white transition-colors">
                 Privacy Policy

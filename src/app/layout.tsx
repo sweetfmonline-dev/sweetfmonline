@@ -51,21 +51,21 @@ const spaceMono = Space_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Sweet FM Online — Ghana's Premier News Portal",
-    template: "%s | Sweet FM Online",
+    default: "SweetFM Online — Ghana's Premier News Portal",
+    template: "%s | SweetFM Online",
   },
-  description: "Breaking news, politics, business, sports & entertainment from Ghana. Sweet FM 106.5 — your trusted news source.",
-  keywords: ["Ghana news", "Sweet FM", "breaking news", "politics", "business", "sports", "Accra", "106.5"],
+  description: "Breaking news, politics, business, sports & entertainment from Ghana. SweetFM 106.5 — your trusted news source.",
+  keywords: ["Ghana news", "SweetFM", "breaking news", "politics", "business", "sports", "Accra", "106.5"],
   metadataBase: new URL("https://www.sweetfmonline.com"),
   alternates: {
     canonical: "https://www.sweetfmonline.com",
   },
   manifest: "/manifest.json",
   openGraph: {
-    title: "Sweet FM Online — Ghana's Premier News Portal",
+    title: "SweetFM Online — Ghana's Premier News Portal",
     description: "Breaking news, politics, business, sports & entertainment from Ghana.",
     url: "https://www.sweetfmonline.com",
-    siteName: "Sweet FM Online",
+    siteName: "SweetFM Online",
     locale: "en_GH",
     type: "website",
     images: [
@@ -73,13 +73,13 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Sweet FM Online - Ghana's Premier News Portal",
+        alt: "SweetFM Online - Ghana's Premier News Portal",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Sweet FM Online",
+    title: "SweetFM Online",
     description: "Ghana's Premier News Portal",
     images: ["/og-image.png"],
     creator: "@sweetfmonline",

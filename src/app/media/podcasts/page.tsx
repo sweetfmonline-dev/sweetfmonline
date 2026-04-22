@@ -3,8 +3,8 @@ import Image from "next/image";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Podcasts | Sweet FM Online",
-  description: "Listen to Sweet FM podcasts — in-depth discussions, interviews, and analysis on Ghana's biggest stories.",
+  title: "Podcasts | SweetFM Online",
+  description: "Listen to SweetFM podcasts — in-depth discussions, interviews, and analysis on Ghana's biggest stories.",
 };
 
 const mockPodcasts = [
@@ -73,7 +73,7 @@ export default function PodcastsPage() {
           <div className="flex items-center gap-3 mb-2">
             <Headphones className="w-8 h-8 text-sweet-red" />
             <h1 className="text-3xl lg:text-4xl font-bold">
-              <span className="text-sweet-red">Sweet FM</span> Podcasts
+              <span className="text-sweet-red">SweetFM</span> Podcasts
             </h1>
           </div>
           <p className="text-gray-300 mt-2">

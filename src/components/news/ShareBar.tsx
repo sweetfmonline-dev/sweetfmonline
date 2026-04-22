@@ -1,7 +1,7 @@
 "use client";
 
 import { Facebook, Twitter, MessageCircle, Share2, Check } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface ShareBarProps {
   title: string;
@@ -10,11 +10,17 @@ interface ShareBarProps {
 
 export function ShareBar({ title, slug }: ShareBarProps) {
   const [copied, setCopied] = useState(false);
+  // Render identical markup on server and first client render to avoid
+  // hydration mismatches, then upgrade to the live origin after mount.
+  const [articleUrl, setArticleUrl] = useState(
+    `https://sweetfmonline.com/article/${slug}`
+  );
 
-  const articleUrl =
-    typeof window !== "undefined"
-      ? `${window.location.origin}/article/${slug}`
-      : `https://sweetfmonline.com/article/${slug}`;
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setArticleUrl(`${window.location.origin}/article/${slug}`);
+    }
+  }, [slug]);
 
   const encodedUrl = encodeURIComponent(articleUrl);
   const encodedTitle = encodeURIComponent(title);

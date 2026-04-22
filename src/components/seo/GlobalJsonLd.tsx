@@ -2,7 +2,7 @@ export function GlobalJsonLd() {
   const organization = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "Sweet FM Online",
+    name: "SweetFM Online",
     url: "https://www.sweetfmonline.com",
     logo: "https://www.sweetfmonline.com/sweet-fm-logo.png",
     sameAs: [
@@ -22,7 +22,7 @@ export function GlobalJsonLd() {
   const webSite = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "Sweet FM Online",
+    name: "SweetFM Online",
     url: "https://www.sweetfmonline.com",
     potentialAction: {
       "@type": "SearchAction",

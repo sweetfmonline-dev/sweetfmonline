@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
 
   return {
     title,
-    description: `Latest ${catName.toLowerCase()} news and updates from Sweet FM Online.`,
+    description: `Latest ${catName.toLowerCase()} news and updates from SweetFM Online.`,
     alternates: {
       canonical: canonicalUrl,
     },

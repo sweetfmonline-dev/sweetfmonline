@@ -14,14 +14,14 @@ const HERO_IMAGE =
 export const metadata: Metadata = {
   title: "OverSight PI — Investigations, Editorials & Analysis",
   description:
-    "In-depth investigative reporting, editorials, and analysis from Sweet FM Online. Unfiltered journalism on power, policy, and the stories behind the headlines.",
+    "In-depth investigative reporting, editorials, and analysis from SweetFM Online. Unfiltered journalism on power, policy, and the stories behind the headlines.",
   alternates: {
     canonical: "https://www.sweetfmonline.com/oversight-pi",
   },
   openGraph: {
-    title: "OverSight PI — Sweet FM Online",
+    title: "OverSight PI — SweetFM Online",
     description:
-      "Investigative reporting, editorials, and analysis from Sweet FM Online.",
+      "Investigative reporting, editorials, and analysis from SweetFM Online.",
     url: "https://www.sweetfmonline.com/oversight-pi",
     type: "website",
   },
@@ -58,7 +58,7 @@ export default async function OversightPiLanding() {
               <div className="flex items-center gap-3 mb-4">
                 <div className="h-px w-12 bg-sweet-red"></div>
                 <span className="text-xs uppercase tracking-[0.35em] text-sweet-red font-bold">
-                  Sweet FM Online
+                  SweetFM Online
                 </span>
               </div>
               <h1 className="font-serif text-4xl lg:text-6xl font-bold tracking-tight leading-none drop-shadow-lg">

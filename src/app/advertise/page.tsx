@@ -2,8 +2,8 @@ import { BarChart3, Users, Radio, Globe, Mail } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Advertise With Us | Sweet FM Online",
-  description: "Reach millions of Ghanaians through Sweet FM 106.5 radio, web, and social media platforms.",
+  title: "Advertise With Us | SweetFM Online",
+  description: "Reach millions of Ghanaians through SweetFM 106.5 radio, web, and social media platforms.",
 };
 
 export default function AdvertisePage() {
@@ -14,7 +14,7 @@ export default function AdvertisePage() {
         <div className="max-w-7xl mx-auto px-4 py-14 lg:py-20">
           <div className="max-w-2xl">
             <h1 className="text-3xl lg:text-5xl font-bold leading-tight">
-              Advertise With Sweet FM
+              Advertise With SweetFM
             </h1>
             <p className="text-white/80 text-lg mt-4 leading-relaxed">
               Connect your brand with millions of engaged Ghanaians across our
@@ -82,7 +82,7 @@ export default function AdvertisePage() {
             },
             {
               title: "Events & Activations",
-              desc: "Brand activations at Sweet FM events, concerts, and community outreach programmes.",
+              desc: "Brand activations at SweetFM events, concerts, and community outreach programmes.",
               features: ["Event Sponsorship", "On-Ground Activations", "Concert Branding", "Community Events"],
             },
             {

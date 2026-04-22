@@ -4,8 +4,8 @@ import { RadioPlayer } from "@/components/media/RadioPlayer";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Listen Live | Sweet FM 106.5",
-  description: "Listen to Sweet FM 106.5 live from Twifo Praso, Central Region, Ghana. Streaming 24/7.",
+  title: "Listen Live | SweetFM 106.5",
+  description: "Listen to SweetFM 106.5 live from Twifo Praso, Central Region, Ghana. Streaming 24/7.",
   alternates: {
     canonical: "https://www.sweetfmonline.com/live",
   },
@@ -28,10 +28,10 @@ export default function LivePage() {
             <span className="text-sm font-semibold">LIVE NOW</span>
           </div>
 
-          <h1 className="sr-only">Listen Live — Sweet FM 106.5</h1>
+          <h1 className="sr-only">Listen Live — SweetFM 106.5</h1>
           <Image
             src="/sweet-fm-logo.svg"
-            alt="Sweet FM 106.5"
+            alt="SweetFM 106.5"
             width={280}
             height={100}
             className="h-20 lg:h-24 w-auto mx-auto mb-6 brightness-0 invert"

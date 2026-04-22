@@ -20,7 +20,7 @@ export function ArticleJsonLd({ article }: ArticleJsonLdProps) {
     },
     publisher: {
       "@type": "Organization",
-      name: "Sweet FM Online",
+      name: "SweetFM Online",
       logo: {
         "@type": "ImageObject",
         url: "https://www.sweetfmonline.com/sweet-fm-logo.png",

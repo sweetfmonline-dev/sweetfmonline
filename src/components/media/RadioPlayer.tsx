@@ -71,7 +71,7 @@ export function RadioPlayer() {
       </button>
 
       <p className="text-white font-semibold text-lg mb-1">
-        {hasStream ? (isPlaying ? "Now Playing" : "Sweet FM 106.5") : "Coming Soon"}
+        {hasStream ? (isPlaying ? "Now Playing" : "SweetFM 106.5") : "Coming Soon"}
       </p>
       <p className="text-gray-400 text-sm mb-6">
         {hasStream

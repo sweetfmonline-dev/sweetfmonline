@@ -2,8 +2,8 @@ import { Mail, Phone, MapPin, Clock } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Contact Us | Sweet FM Online",
-  description: "Get in touch with Sweet FM 106.5. Send us news tips, feedback, or advertising inquiries.",
+  title: "Contact Us | SweetFM Online",
+  description: "Get in touch with SweetFM 106.5. Send us news tips, feedback, or advertising inquiries.",
 };
 
 export default function ContactPage() {
@@ -101,7 +101,7 @@ export default function ContactPage() {
                   <MapPin className="w-5 h-5 text-sweet-red mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="font-medium text-charcoal text-sm">Address</p>
-                    <p className="text-gray-500 text-sm">Sweet FM House, Labone, Accra, Ghana</p>
+                    <p className="text-gray-500 text-sm">SweetFM House, Labone, Accra, Ghana</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">

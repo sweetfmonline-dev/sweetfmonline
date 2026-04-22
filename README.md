@@ -1,6 +1,6 @@
-# Sweet FM Online
+# SweetFM Online
 
-Sweet FM Online is a Next.js news website with a data layer that supports:
+SweetFM Online is a Next.js news website with a data layer that supports:
 
 1. Contentful (primary source when configured)
 2. Supabase (fallback)

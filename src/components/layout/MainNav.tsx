@@ -80,7 +80,7 @@ export function MainNav({ className }: MainNavProps) {
           <Link href="/" className="flex-shrink-0">
             <Image
               src="/sweet-fm-logo.svg"
-              alt="Sweet FM 106.5"
+              alt="SweetFM 106.5"
               width={240}
               height={90}
               className="h-20 lg:h-24 w-auto"

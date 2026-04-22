@@ -91,7 +91,7 @@ export default function UploadPage() {
           className="bg-white rounded-xl shadow-lg p-8 w-full max-w-sm"
         >
           <h1 className="text-2xl font-bold text-gray-900 mb-2">
-            Sweet FM Media Upload
+            SweetFM Media Upload
           </h1>
           <p className="text-gray-500 text-sm mb-6">
             Enter the upload secret to continue

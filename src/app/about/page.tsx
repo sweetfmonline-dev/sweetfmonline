@@ -2,8 +2,8 @@ import { Radio, Users, Award, Globe } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About Us | Sweet FM Online",
-  description: "Learn about Sweet FM 106.5 — Ghana's premier news and media portal delivering independent, fearless, and credible journalism.",
+  title: "About Us | SweetFM Online",
+  description: "Learn about SweetFM 106.5 — Ghana's premier news and media portal delivering independent, fearless, and credible journalism.",
 };
 
 export default function AboutPage() {
@@ -14,7 +14,7 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-4 py-12 lg:py-20">
           <div className="max-w-3xl">
             <h1 className="text-3xl lg:text-5xl font-bold leading-tight">
-              About <span className="text-sweet-red">Sweet FM Online</span>
+              About <span className="text-sweet-red">SweetFM Online</span>
             </h1>
             <p className="text-gray-300 text-lg mt-4 leading-relaxed">
               Independent. Fearless. Credible. Ghana&apos;s most trusted source for
@@ -33,7 +33,7 @@ export default function AboutPage() {
               <h2 className="text-2xl font-bold text-charcoal mb-4">Our Story</h2>
               <div className="font-serif text-lg text-gray-700 leading-relaxed space-y-4">
                 <p>
-                  Sweet FM 106.5 has been at the forefront of Ghanaian journalism,
+                  SweetFM 106.5 has been at the forefront of Ghanaian journalism,
                   delivering accurate, timely, and impactful news to millions of
                   listeners and readers across the country and beyond.
                 </p>
@@ -67,7 +67,7 @@ export default function AboutPage() {
               <h2 className="text-2xl font-bold text-charcoal mb-4">Editorial Policy</h2>
               <div className="font-serif text-lg text-gray-700 leading-relaxed space-y-4">
                 <p>
-                  Sweet FM Online is committed to accuracy, fairness, and balance in
+                  SweetFM Online is committed to accuracy, fairness, and balance in
                   all our reporting. We adhere to the Ghana Journalists Association
                   (GJA) Code of Ethics and the principles of responsible journalism.
                 </p>

@@ -1,6 +1,6 @@
 {
-  "name": "Sweet FM Online",
-  "short_name": "Sweet FM",
+  "name": "SweetFM Online",
+  "short_name": "SweetFM",
   "description": "Ghana's Premier News Portal - Breaking news, politics, business, sports, and entertainment.",
   "start_url": "/",
   "display": "standalone",

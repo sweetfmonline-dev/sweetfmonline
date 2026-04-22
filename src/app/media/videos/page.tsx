@@ -3,8 +3,8 @@ import Image from "next/image";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Videos | Sweet FM Online",
-  description: "Watch the latest news videos, interviews, and reports from Sweet FM Online.",
+  title: "Videos | SweetFM Online",
+  description: "Watch the latest news videos, interviews, and reports from SweetFM Online.",
 };
 
 const mockVideos = [
@@ -65,7 +65,7 @@ export default function VideosPage() {
       <div className="bg-charcoal text-white">
         <div className="max-w-7xl mx-auto px-4 py-8 lg:py-12">
           <h1 className="text-3xl lg:text-4xl font-bold">
-            <span className="text-sweet-red">Sweet FM</span> Videos
+            <span className="text-sweet-red">SweetFM</span> Videos
           </h1>
           <p className="text-gray-300 mt-2">
             Watch the latest news reports, interviews, and exclusive content.
