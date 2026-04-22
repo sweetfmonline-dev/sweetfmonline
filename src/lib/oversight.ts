@@ -28,8 +28,7 @@ export const OVERSIGHT_SUBSECTIONS: OversightSubsectionConfig[] = [
     description:
       "Deep reporting on power, institutions, and public officials. Months of work. Documents, sources, and accountability.",
     readActionLabel: "Read the Report",
-    heroImage:
-      "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=2400&q=80",
+    heroImage: "/oversight/dossier.jpg",
     heroAlt: "Stacks of documents and files",
   },
   {
@@ -42,8 +41,7 @@ export const OVERSIGHT_SUBSECTIONS: OversightSubsectionConfig[] = [
     description:
       "Verification of political claims, viral rumors, and statements from public figures. Evidence over noise.",
     readActionLabel: "Read the Verdict",
-    heroImage:
-      "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=2400&q=80",
+    heroImage: "/oversight/fact-check.jpg",
     heroAlt: "Magnifying glass over text",
   },
   {
@@ -56,8 +54,7 @@ export const OVERSIGHT_SUBSECTIONS: OversightSubsectionConfig[] = [
     description:
       "Profiles, essays, and cultural deep dives. Stories that reward the patient reader.",
     readActionLabel: "Begin Reading",
-    heroImage:
-      "https://images.unsplash.com/photo-1519682337058-a94d519337bc?auto=format&fit=crop&w=2400&q=80",
+    heroImage: "/oversight/long-read.jpg",
     heroAlt: "Open book with reading light",
   },
   {
@@ -70,8 +67,7 @@ export const OVERSIGHT_SUBSECTIONS: OversightSubsectionConfig[] = [
     description:
       "Op-eds from academics, former officials, activists, and industry experts. Many voices, one arena.",
     readActionLabel: "Read the Essay",
-    heroImage:
-      "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=2400&q=80",
+    heroImage: "/oversight/forum.jpg",
     heroAlt: "Panel discussion with speakers and audience",
   },
   {
@@ -84,8 +80,7 @@ export const OVERSIGHT_SUBSECTIONS: OversightSubsectionConfig[] = [
     description:
       "Editorials and commentary by Scott Bolshevik. Unfiltered. Unafraid. Uncompromising.",
     readActionLabel: "Read the Editorial",
-    heroImage:
-      "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=2400&q=80",
+    heroImage: "/oversight/bolshevik.jpg",
     heroAlt: "Vintage typewriter",
   },
 ];
