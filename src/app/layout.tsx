@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Inter, Merriweather } from "next/font/google";
+import { Inter, Merriweather, Playfair_Display, Crimson_Pro, Bebas_Neue, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { Header, Footer } from "@/components/layout";
 import { GlobalJsonLd } from "@/components/seo/GlobalJsonLd";
@@ -15,6 +15,37 @@ const merriweather = Merriweather({
   variable: "--font-merriweather",
   subsets: ["latin"],
   weight: ["300", "400", "700", "900"],
+  display: "swap",
+});
+
+// OverSight PI magazine feature typography
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
+  subsets: ["latin"],
+  weight: ["400", "700", "900"],
+  style: ["normal", "italic"],
+  display: "swap",
+});
+
+const crimson = Crimson_Pro({
+  variable: "--font-crimson",
+  subsets: ["latin"],
+  weight: ["300", "400", "600"],
+  style: ["normal", "italic"],
+  display: "swap",
+});
+
+const bebas = Bebas_Neue({
+  variable: "--font-bebas",
+  subsets: ["latin"],
+  weight: ["400"],
+  display: "swap",
+});
+
+const spaceMono = Space_Mono({
+  variable: "--font-space-mono",
+  subsets: ["latin"],
+  weight: ["400", "700"],
   display: "swap",
 });
 
@@ -78,7 +109,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${merriweather.variable} antialiased bg-gray-50`}
+        className={`${inter.variable} ${merriweather.variable} ${playfair.variable} ${crimson.variable} ${bebas.variable} ${spaceMono.variable} antialiased bg-gray-50`}
       >
         {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
           <>

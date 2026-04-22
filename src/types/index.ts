@@ -15,6 +15,28 @@ export interface Category {
   color?: string;
 }
 
+export interface SidebarStat {
+  number: string;
+  label: string;
+}
+
+export interface KeyRole {
+  period: string;
+  role: string;
+}
+
+export interface FastFact {
+  label: string;
+  value: string;
+}
+
+export interface TimelineEntry {
+  year: string;
+  title: string;
+  description: string;
+  highlight?: boolean;
+}
+
 export interface Article {
   id: string;
   title: string;
@@ -31,6 +53,16 @@ export interface Article {
   isFeatured?: boolean;
   readTime?: number;
   tags?: string[];
+
+  // Feature-article fields (optional — used by OverSight PI magazine layout)
+  kicker?: string;
+  issueLabel?: string;
+  pullQuote?: string;
+  pullQuoteAttribution?: string;
+  sidebarStats?: SidebarStat[];
+  keyRoles?: KeyRole[];
+  fastFacts?: FastFact[];
+  timeline?: TimelineEntry[];
 }
 
 export interface BreakingNews {

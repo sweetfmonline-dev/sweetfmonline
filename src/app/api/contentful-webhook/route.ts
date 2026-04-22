@@ -307,6 +307,15 @@ async function syncArticle(entryId: string, fields: Record<string, any>, sys: an
     tags: fields.tags?.[locale] || null,
     category_id: categoryId,
     author_id: authorId,
+    // Optional feature-article fields (OverSight PI magazine layout)
+    kicker: fields.kicker?.[locale] || null,
+    issue_label: fields.issueLabel?.[locale] || null,
+    pull_quote: fields.pullQuote?.[locale] || null,
+    pull_quote_attribution: fields.pullQuoteAttribution?.[locale] || null,
+    sidebar_stats: fields.sidebarStats?.[locale] || null,
+    key_roles: fields.keyRoles?.[locale] || null,
+    fast_facts: fields.fastFacts?.[locale] || null,
+    timeline: fields.timeline?.[locale] || null,
   });
   console.log(`Synced article: ${slug} (image: ${featuredImageUrl ? "yes" : "MISSING - CMA unavailable"})`);
 }

@@ -1,5 +1,16 @@
 import { cache } from "react";
-import type { Article, Author, BreakingNews, Category, Advertisement, AdPosition } from "@/types";
+import type {
+  Article,
+  Author,
+  BreakingNews,
+  Category,
+  Advertisement,
+  AdPosition,
+  SidebarStat,
+  KeyRole,
+  FastFact,
+  TimelineEntry,
+} from "@/types";
 import { isSupabaseConfigured, supabaseRestFetch } from "@/lib/supabase";
 
 // Contentful CDA is disabled – all reads come from Supabase.
@@ -38,6 +49,25 @@ interface ArticleRow {
   tags: string[] | null;
   category: CategoryRow | null;
   author: AuthorRow | null;
+  // Feature-article fields (nullable)
+  kicker: string | null;
+  issue_label: string | null;
+  pull_quote: string | null;
+  pull_quote_attribution: string | null;
+  sidebar_stats: unknown;
+  key_roles: unknown;
+  fast_facts: unknown;
+  timeline: unknown;
+}
+
+// Safely parse a jsonb column that may arrive as an object, array, string, or null.
+function parseJsonArray<T>(value: unknown): T[] | undefined {
+  if (!value) return undefined;
+  let parsed: unknown = value;
+  if (typeof value === "string") {
+    try { parsed = JSON.parse(value); } catch { return undefined; }
+  }
+  return Array.isArray(parsed) && parsed.length > 0 ? (parsed as T[]) : undefined;
 }
 
 interface BreakingNewsRow {
@@ -96,6 +126,14 @@ function mapArticle(row: ArticleRow): Article {
     tags: row.tags || [],
     category: row.category ? mapCategory(row.category) : fallbackCategory,
     author: row.author ? mapAuthor(row.author) : fallbackAuthor,
+    kicker: row.kicker || undefined,
+    issueLabel: row.issue_label || undefined,
+    pullQuote: row.pull_quote || undefined,
+    pullQuoteAttribution: row.pull_quote_attribution || undefined,
+    sidebarStats: parseJsonArray<SidebarStat>(row.sidebar_stats),
+    keyRoles: parseJsonArray<KeyRole>(row.key_roles),
+    fastFacts: parseJsonArray<FastFact>(row.fast_facts),
+    timeline: parseJsonArray<TimelineEntry>(row.timeline),
   };
 }
 
@@ -109,7 +147,7 @@ function mapBreakingNews(row: BreakingNewsRow): BreakingNews {
 }
 
 const articleSelect =
-  "id,title,slug,excerpt,content,featured_image,published_at,updated_at,is_breaking,is_featured,read_time,tags,category:categories(id,name,slug,description,color,parent_category_id),author:authors(id,name,slug,avatar,bio,role)";
+  "id,title,slug,excerpt,content,featured_image,published_at,updated_at,is_breaking,is_featured,read_time,tags,kicker,issue_label,pull_quote,pull_quote_attribution,sidebar_stats,key_roles,fast_facts,timeline,category:categories(id,name,slug,description,color,parent_category_id),author:authors(id,name,slug,avatar,bio,role)";
 
 async function trySupabaseCategories(): Promise<Category[] | null> {
   if (!isSupabaseConfigured) return null;
